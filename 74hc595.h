@@ -47,10 +47,10 @@ __bit SER;
 __bit SRCLK;
 #endif
 
-void push_byte_to_595(uint8_t byte);
+//void push_byte_to_595(uint8_t byte);
 void push_to_serial(uint8_t *output, uint8_t len);
-void clr_single_595(void);
-void double_595_init(void);
+//void clr_single_595(void);
+//void double_595_init(void);
 
 #ifdef	__cplusplus
 extern "C" {
