@@ -28,28 +28,24 @@
 
 // This is a guard condition so that contents of this file are not included
 // more than once.  
-#ifndef XC_HEADER_TEMPLATE_H
-#define	XC_HEADER_TEMPLATE_H
+#ifndef _LCD_MENU_H_
+#define	_LCD_MENU_H_
 
 #include <xc.h> // include processor files - each processor file is guarded.  
-#include "lcd_menu.h"
 
-#define _XTAL_FREQ  8000000
+#define MENU_ITEM_NUMBER                        6
+#define MENU_NIGHTLIGHT_BRIGHTNESS              "NLight Brightnes"
+#define MENU_NIGHTLIGHT_COLOR                   "NLight Color"
+#define MENU_LIGHT_UP_SPEED                     "Light Up Speed"
+#define MENU_LIGHT_DURATION                     "Light Duration"
+#define MENU_DAYLIGHT_SENSITIVITY               "NLight Sentivity"
+#define MENU_PRELIGHTING                        "Prelighting"
 
-typedef struct {
-    menu_display_values *lcd_menu;
-    struct {
-        uint8_t brightness;
-        uint8_t color;
-    }night_light;
-    struct {
-        uint32_t status;
-        uint8_t on_speed;
-        uint8_t duration;
-    }main_light;
-}stairwell;
-
-extern stairwell stairs;
+typedef struct{
+    uint8_t *nlight_brightness;
+    uint8_t *nlight_color;
+    uint8_t menu_index;
+}menu_display_values;
 
 #ifdef	__cplusplus
 extern "C" {
@@ -62,5 +58,5 @@ extern "C" {
 }
 #endif /* __cplusplus */
 
-#endif	/* XC_HEADER_TEMPLATE_H */
+#endif	/* _LCD_MENU_H_ */
 

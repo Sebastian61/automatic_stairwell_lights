@@ -2380,10 +2380,8 @@ __bit SER;
 __bit SRCLK;
 
 
-void push_byte_to_595(uint8_t byte);
+
 void push_to_serial(uint8_t *output, uint8_t len);
-void clr_single_595(void);
-void double_595_init(void);
 # 3 "74hc595.c" 2
 # 33 "74hc595.c"
 void push_to_serial (uint8_t *output, uint8_t len) {

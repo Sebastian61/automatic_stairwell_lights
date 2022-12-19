@@ -1,4 +1,4 @@
-# 1 "main.c"
+# 1 "lcd_hal.c"
 # 1 "<built-in>" 1
 # 1 "<built-in>" 3
 # 288 "<built-in>" 3
@@ -6,22 +6,12 @@
 # 1 "<built-in>" 2
 # 1 "C:/Program Files/Microchip/MPLABX/v6.00/packs/Microchip/PIC16Fxxx_DFP/1.3.42/xc8\\pic\\include\\language_support.h" 1 3
 # 2 "<built-in>" 2
-# 1 "main.c" 2
-# 13 "main.c"
-#pragma config FOSC = INTRCIO
-#pragma config WDTE = OFF
-#pragma config PWRTE = ON
-#pragma config MCLRE = ON
-#pragma config CP = OFF
-#pragma config CPD = OFF
-#pragma config BOREN = ON
-#pragma config IESO = OFF
-#pragma config FCMEN = OFF
+# 1 "lcd_hal.c" 2
+# 1 "./lcd_hal.h" 1
+# 1 "lcd_hal.c" 2
 
-
-
-
-
+# 1 "./74hc595.h" 1
+# 34 "./74hc595.h"
 # 1 "C:/Program Files/Microchip/MPLABX/v6.00/packs/Microchip/PIC16Fxxx_DFP/1.3.42/xc8\\pic\\include\\xc.h" 1 3
 # 18 "C:/Program Files/Microchip/MPLABX/v6.00/packs/Microchip/PIC16Fxxx_DFP/1.3.42/xc8\\pic\\include\\xc.h" 3
 extern const char __xc8_OPTIM_SPEED;
@@ -2377,133 +2367,12 @@ extern __bank0 unsigned char __resetbits;
 extern __bank0 __bit __powerdown;
 extern __bank0 __bit __timeout;
 # 29 "C:/Program Files/Microchip/MPLABX/v6.00/packs/Microchip/PIC16Fxxx_DFP/1.3.42/xc8\\pic\\include\\xc.h" 2 3
-# 26 "main.c" 2
-
-# 1 "C:\\Program Files\\Microchip\\xc8\\v2.36\\pic\\include\\c90\\stdlib.h" 1 3
-
-
-
-
-# 1 "C:/Program Files/Microchip/MPLABX/v6.00/packs/Microchip/PIC16Fxxx_DFP/1.3.42/xc8\\pic\\include\\__size_t.h" 1 3
-
-
-
-typedef unsigned size_t;
-# 5 "C:\\Program Files\\Microchip\\xc8\\v2.36\\pic\\include\\c90\\stdlib.h" 2 3
-
-# 1 "C:/Program Files/Microchip/MPLABX/v6.00/packs/Microchip/PIC16Fxxx_DFP/1.3.42/xc8\\pic\\include\\__null.h" 1 3
-# 6 "C:\\Program Files\\Microchip\\xc8\\v2.36\\pic\\include\\c90\\stdlib.h" 2 3
-
-typedef unsigned short wchar_t;
+# 34 "./74hc595.h" 2
 
 
 
 
 
-
-
-typedef struct {
- int rem;
- int quot;
-} div_t;
-typedef struct {
- unsigned rem;
- unsigned quot;
-} udiv_t;
-typedef struct {
- long quot;
- long rem;
-} ldiv_t;
-typedef struct {
- unsigned long quot;
- unsigned long rem;
-} uldiv_t;
-# 65 "C:\\Program Files\\Microchip\\xc8\\v2.36\\pic\\include\\c90\\stdlib.h" 3
-extern double atof(const char *);
-extern double strtod(const char *, const char **);
-extern int atoi(const char *);
-extern unsigned xtoi(const char *);
-extern long atol(const char *);
-
-
-
-extern long strtol(const char *, char **, int);
-
-extern int rand(void);
-extern void srand(unsigned int);
-extern void * calloc(size_t, size_t);
-extern div_t div(int numer, int denom);
-extern udiv_t udiv(unsigned numer, unsigned denom);
-extern ldiv_t ldiv(long numer, long denom);
-extern uldiv_t uldiv(unsigned long numer,unsigned long denom);
-
-
-
-extern unsigned long _lrotl(unsigned long value, unsigned int shift);
-extern unsigned long _lrotr(unsigned long value, unsigned int shift);
-extern unsigned int _rotl(unsigned int value, unsigned int shift);
-extern unsigned int _rotr(unsigned int value, unsigned int shift);
-
-
-
-
-extern void * malloc(size_t);
-extern void free(void *);
-extern void * realloc(void *, size_t);
-# 104 "C:\\Program Files\\Microchip\\xc8\\v2.36\\pic\\include\\c90\\stdlib.h" 3
-extern int atexit(void (*)(void));
-extern char * getenv(const char *);
-extern char ** environ;
-extern int system(char *);
-extern void qsort(void *, size_t, size_t, int (*)(const void *, const void *));
-extern void * bsearch(const void *, void *, size_t, size_t, int(*)(const void *, const void *));
-extern int abs(int);
-extern long labs(long);
-
-extern char * itoa(char * buf, int val, int base);
-extern char * utoa(char * buf, unsigned val, int base);
-
-
-
-
-extern char * ltoa(char * buf, long val, int base);
-extern char * ultoa(char * buf, unsigned long val, int base);
-
-extern char * ftoa(float f, int * status);
-# 27 "main.c" 2
-
-# 1 "./main.h" 1
-# 35 "./main.h"
-# 1 "./lcd_menu.h" 1
-# 44 "./lcd_menu.h"
-typedef struct{
-    uint8_t *nlight_brightness;
-    uint8_t *nlight_color;
-    uint8_t menu_index;
-}menu_display_values;
-# 35 "./main.h" 2
-
-
-
-
-typedef struct {
-    menu_display_values *lcd_menu;
-    struct {
-        uint8_t brightness;
-        uint8_t color;
-    }night_light;
-    struct {
-        uint32_t status;
-        uint8_t on_speed;
-        uint8_t duration;
-    }main_light;
-}stairwell;
-
-extern stairwell stairs;
-# 28 "main.c" 2
-
-# 1 "./74hc595.h" 1
-# 39 "./74hc595.h"
 __bit RCLK;
 
 
@@ -2517,24 +2386,5 @@ __bit SRCLK;
 
 
 void push_to_serial(uint8_t *output, uint8_t len);
-# 29 "main.c" 2
+# 2 "lcd_hal.c" 2
 
-# 1 "./lcd.h" 1
-# 15 "./lcd.h"
-void lcd_action(void);
-# 30 "main.c" 2
-
-
-void gpio_init(void);
-void adc_init(void);
-
-stairwell stairs;
-
-void main(void) {
-    _delay((unsigned long)((100)*(8000000/4000000.0)));
-    _delay((unsigned long)((100)*(8000000/4000.0)));
-    lcd_action();
-    stairs.main_light.duration;
-
-    return;
-}

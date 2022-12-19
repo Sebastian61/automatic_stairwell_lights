@@ -26,9 +26,19 @@
 #include <xc.h>
 #include "stdlib.h"
 #include "main.h"
+#include "74hc595.h"
+#include "lcd.h"
+
+void gpio_init(void);
+void adc_init(void);
+
+stairwell stairs;
 
 void main(void) {
     __delay_us(100);
     __delay_ms(100);
+    lcd_action();
+    stairs.main_light.duration;
+//    stair_action();
     return;
 }

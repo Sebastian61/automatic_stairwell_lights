@@ -11,7 +11,9 @@
 [v ___eecpymem __eecpymem `(v  1 e 1 0 ]
 "39
 [v ___memcpyee __memcpyee `(v  1 e 1 0 ]
-"30 C:\Users\Sebastian\personalGit\automatic_stairwell_lights\main.c
+"4 C:\Users\Sebastian\personalGit\automatic_stairwell_lights\lcd.c
+[v _lcd_action lcd_action `(v  1 e 1 0 ]
+"37 C:\Users\Sebastian\personalGit\automatic_stairwell_lights\main.c
 [v _main main `(v  1 e 1 0 ]
 "39 C:\Users\Sebastian\personalGit\automatic_stairwell_lights/74hc595.h
 [v _RCLK RCLK `b  1 e 0 0 ]
@@ -19,8 +21,13 @@
 [v _SER SER `b  1 e 0 0 ]
 "47
 [v _SRCLK SRCLK `b  1 e 0 0 ]
-"30 C:\Users\Sebastian\personalGit\automatic_stairwell_lights\main.c
+"37 C:\Users\Sebastian\personalGit\automatic_stairwell_lights\main.c
 [v _main main `(v  1 e 1 0 ]
 {
-"34
+"44
+} 0
+"4 C:\Users\Sebastian\personalGit\automatic_stairwell_lights\lcd.c
+[v _lcd_action lcd_action `(v  1 e 1 0 ]
+{
+"6
 } 0
