@@ -1,7 +1,7 @@
 #include "lcd_hal.h"
 #include "74hc595.h"
 
-static LCD_data_t working_data;//TODO change 595 function names to updated names
+static LCD_data_t working_data;//TODO change 595 function names to updated names TODO change lcd functions names as well
 
 static void send_byte_LCD(LCD_data_t *LCD_data) {
     uint8_t output = (LCD_data->data & 0xf0);
@@ -50,10 +50,10 @@ void init_LCD() {
     set_command_LCD(DISPLAY_ON_OFF_CONTROL);
     set_command_LCD(ENTRY_MODE_SET);
     set_command_LCD(CLEAR_DISPLAY);
-    for(uint16_t i = 0; i < 1000; ++i); 
+    for(uint16_t i = 0; i < 1000; ++i); 		//TODO change delay to delay ms
 }
 
 void clear_LCD() {
     set_command_LCD(CLEAR_DISPLAY);
-    for(uint16_t i = 0; i < 1000; ++i); 
+    for(uint16_t i = 0; i < 1000; ++i); //TODO change delay to delay_ms
 }
