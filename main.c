@@ -62,12 +62,14 @@ void gpio_init(void) {
     //port A outputs
     //port A inputs
     //no modifications to TRISA needed due to being default values
-    IOCA |= (_IOCA_IOCA0_MASK | _IOCA_IOCA1_MASK | _IOCA_IOCA5_MASK);  //set interrupts for rotary encoder
     //port B
     //port B output
     //port C
     PORTC &= ~(_PORTC_RC0_MASK | _PORTC_RC1_MASK | _PORTC_RC2_MASK | _PORTC_RC3_MASK);
     TRISC &= ~(_TRISC_TRISC0_MASK | _TRISC_TRISC1_MASK | _TRISC_TRISC2_MASK | _TRISC_TRISC3_MASK);
+    //interrupts
+    IOCA |= (_IOCA_IOCA0_MASK | _IOCA_IOCA1_MASK | _IOCA_IOCA5_MASK);  //set interrupts for rotary encoder
+    INTCONbits.RABIE = 1; //pin change interrupts
 }
 
 void adc_init(void) {

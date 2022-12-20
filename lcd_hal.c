@@ -50,7 +50,7 @@ void lcd_set_command(uint8_t command) {
 }
 
 void lcd_move_cursor(uint8_t line, uint8_t offset) {
-    lcd_set_command((((line - 1u) * 0x40u) + offset) | SET_DDRAM_ADDR);
+    lcd_set_command((((line - 1u) * 0x40) + offset) | SET_DDRAM_ADDR);
 }
 
 void lcd_clear() {
