@@ -5,14 +5,14 @@
 static LCD_data_t working_data;
 
 static void lcd_send_byte(LCD_data_t *LCD_data) {
-    uint8_t output = (LCD_data->data & 0xf0);
+    uint8_t output = (LCD_data->data & 0xf0u);
     output |= LCD_data->data_type;
     push_to_lcd(&output);
     output |= LCD_EN;
     push_to_lcd(&output);
     output &= ~LCD_EN;
     push_to_lcd(&output); 
-    output = LCD_data->data << 4;
+    output = (uint8_t)(LCD_data->data << 4);
     output |= LCD_data->data_type;
     push_to_lcd(&output);
     output |= LCD_EN;
@@ -50,7 +50,7 @@ void lcd_set_command(uint8_t command) {
 }
 
 void lcd_move_cursor(uint8_t line, uint8_t offset) {
-    lcd_set_command((((line - 1) * 0x40) + offset) | SET_DDRAM_ADDR);
+    lcd_set_command((((line - 1u) * 0x40u) + offset) | SET_DDRAM_ADDR);
 }
 
 void lcd_clear() {
