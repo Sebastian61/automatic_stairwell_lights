@@ -48,9 +48,10 @@ __bit SRCLK;
 #endif
 
 //void push_byte_to_595(uint8_t byte);
-void push_to_serial(uint8_t *output, uint8_t len);
 //void clr_single_595(void);
 //void double_595_init(void);
+void push_to_lcd(uint8_t *output);
+void push_to_led(uint32_t led);
 
 #ifdef	__cplusplus
 extern "C" {

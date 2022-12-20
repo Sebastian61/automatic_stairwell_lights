@@ -35,6 +35,7 @@ void adc_init(void);
 stairwell stairs;
 
 void main(void) {
+    gpio_init();
     lcd_init();
     __delay_us(100);
     __delay_ms(100);
@@ -42,4 +43,12 @@ void main(void) {
     stairs.main_light.duration;
 //    stair_action();
     return;
+}
+
+void gpio_init(void) {
+    
+}
+
+void adc_init(void) {
+    
 }
