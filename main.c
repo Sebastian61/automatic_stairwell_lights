@@ -28,6 +28,7 @@
 #include "main.h"
 #include "74hc595.h"
 #include "lcd.h"
+#include "interrupt.h"
 
 void gpio_init(void);
 void adc_init(void);
