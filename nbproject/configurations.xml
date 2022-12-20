@@ -11,6 +11,7 @@
       <itemPath>lcd_hal.h</itemPath>
       <itemPath>encoder_hal.h</itemPath>
       <itemPath>interrupt.h</itemPath>
+      <itemPath>timer.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -25,6 +26,7 @@
       <itemPath>lcd_hal.c</itemPath>
       <itemPath>encoder_hal.c</itemPath>
       <itemPath>interrupt.c</itemPath>
+      <itemPath>timer.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

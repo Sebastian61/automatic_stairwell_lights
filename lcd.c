@@ -22,6 +22,10 @@ void lcd_main_menu(void) {
     
 }
 
+void lcd_setting_menu(void) {
+    
+}
+
 void lcd_action(void){
     return;
 }

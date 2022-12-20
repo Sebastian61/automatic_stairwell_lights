@@ -7,5 +7,5 @@ void encoder_init(void) {
 }
 
 encoder_state get_encoder_state(void) {
-    
+    return;
 }

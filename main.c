@@ -30,23 +30,29 @@
 #include "lcd.h"
 #include "interrupt.h"
 #include "encoder_hal.h"
+#include "timer.h"
 
 void gpio_init(void);
 void adc_init(void);
 void interrupt_init(void);
+void timer_init(void);
 
 stairwell stairs;
 
 void main(void) {
     gpio_init();
     lcd_init();
+    timer_init();
     adc_init();
     encoder_init();
-    __delay_us(100);
-    __delay_ms(100);
-    lcd_action();
-    stairs.main_light.duration;
-//    stair_action();
+    timer1_on_off(1);
+    while(1) {
+        __delay_us(100);
+        __delay_ms(100);
+        lcd_action();
+        stairs.main_light.duration;
+        //    stair_action();
+    }
     return;
 }
 
