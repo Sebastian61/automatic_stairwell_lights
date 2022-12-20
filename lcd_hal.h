@@ -55,7 +55,9 @@ extern "C" {
 #define LARGE_FONT                      (1 << 2)   //5 * 10
 #define SMALL_FONT                      (0 << 2)   //5 * 8
 
-
+#define SET_CGRAM_ADDR                  (1 << 6)
+#define SET_DDRAM_ADDR                  (1 << 7)
+    
 #define ON  1
 #define OFF 0
 #define LCD_LED(n)  (n << 1)
@@ -93,10 +95,15 @@ typedef struct {
 #define NUMBER_OF_LINES         TWO_DISPLAY_LINES
 #define CHARACTER_FONT          SMALL_FONT
 
+//LCD addresses
+#define LCD_LINE_ONE            0x00
+#define LCD_LINE_TWO            0x40
+
 void lcd_set_data_four_bits(void);
 void lcd_display_character(uint8_t character_data);
 void lcd_set_command(uint8_t command);
 void lcd_send_string(uint8_t *str_data, uint8_t str_length);
+void lcd_move_cursor(uint8_t line, uint8_t offset);
 void lcd_clear(void);
 
 #ifdef	__cplusplus

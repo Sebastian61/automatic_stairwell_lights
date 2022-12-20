@@ -49,6 +49,10 @@ void lcd_set_command(uint8_t command) {
     lcd_send_byte(&working_data);
 }
 
+void lcd_move_cursor(uint8_t line, uint8_t offset) {
+    lcd_set_command((((line - 1) * 0x40) + offset) | SET_DDRAM_ADDR);
+}
+
 void lcd_clear() {
     lcd_set_command(CLEAR_DISPLAY);
     __delay_ms(2);

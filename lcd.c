@@ -18,6 +18,10 @@ void lcd_init() {
     lcd_send_string((uint8_t *)"Initializing...", 15);
 }
 
+void lcd_main_menu(void) {
+    
+}
+
 void lcd_action(void){
     return;
 }
