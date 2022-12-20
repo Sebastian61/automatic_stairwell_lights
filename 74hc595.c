@@ -30,7 +30,7 @@
 //}
 
 //this pushes len number of bytes in output to serialized 595s
-void push_to_serial (uint8_t *output, uint8_t len) {
+void push_to_serial(uint8_t *output, uint8_t len) {
     for (uint8_t j = 0; j < len; ++j) {
         for (uint8_t i = 0; i < 8; ++i) {
             SER = ((*output << i) & (1 << 7)) ? 1 : 0;

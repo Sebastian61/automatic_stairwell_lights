@@ -35,6 +35,7 @@
 #include "lcd_menu.h"
 
 #define _XTAL_FREQ  8000000
+#define DATALEN     DATA_LENGTH_FOUR_BITS
 
 typedef struct {
     menu_display_values *lcd_menu;

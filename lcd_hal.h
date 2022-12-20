@@ -8,6 +8,8 @@
 #ifndef LCD_HAL_H
 #define	LCD_HAL_H
 
+#include <xc.h>
+
 #ifdef	__cplusplus
 extern "C" {
 #endif
@@ -91,11 +93,11 @@ typedef struct {
 #define NUMBER_OF_LINES         TWO_DISPLAY_LINES
 #define CHARACTER_FONT          SMALL_FONT
 
-void display_character_LCD(uint8_t character_data);
-void set_command_LCD(uint8_t command);
-void send_string_LCD(uint8_t *str_data, uint8_t str_length);
-void clear_LCD(void);
-void init_LCD(void);
+void lcd_set_data_four_bits(void);
+void lcd_display_character(uint8_t character_data);
+void lcd_set_command(uint8_t command);
+void lcd_send_string(uint8_t *str_data, uint8_t str_length);
+void lcd_clear(void);
 
 #ifdef	__cplusplus
 }

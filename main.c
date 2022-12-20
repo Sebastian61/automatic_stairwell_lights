@@ -35,6 +35,7 @@ void adc_init(void);
 stairwell stairs;
 
 void main(void) {
+    lcd_init();
     __delay_us(100);
     __delay_ms(100);
     lcd_action();

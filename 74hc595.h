@@ -54,10 +54,7 @@ void push_to_serial(uint8_t *output, uint8_t len);
 
 #ifdef	__cplusplus
 extern "C" {
-#endif /* __cplusplus */
-
-    // TODO If C++ is being used, regular C code needs function names to have C 
-    // linkage so the functions can be used by the c code. 
+#endif /* __cplusplus */ 
 
 #ifdef	__cplusplus
 }

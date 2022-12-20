@@ -34,6 +34,7 @@
 #include <xc.h> // include processor files - each processor file is guarded.  
 
 #define MENU_ITEM_NUMBER                        6
+
 #define MENU_NIGHTLIGHT_BRIGHTNESS              "NLight Brightnes"
 #define MENU_NIGHTLIGHT_COLOR                   "NLight Color"
 #define MENU_LIGHT_UP_SPEED                     "Light Up Speed"
@@ -50,9 +51,6 @@ typedef struct{
 #ifdef	__cplusplus
 extern "C" {
 #endif /* __cplusplus */
-
-    // TODO If C++ is being used, regular C code needs function names to have C 
-    // linkage so the functions can be used by the c code. 
 
 #ifdef	__cplusplus
 }
