@@ -37,10 +37,10 @@
 #define _XTAL_FREQ  8000000
 #define DATALEN     DATA_LENGTH_FOUR_BITS
 
-#define RCLK        PORTAbits.RA2
-#define SER         PORTAbits.RA4
-#define SRCLK       PORTBbits.RB6
-#define LEDRCLK     PORTBbits.RB7
+#define RCLK        PORTCbits.RC0
+#define SER         PORTCbits.RC1
+#define SRCLK       PORTCbits.RC2
+#define LEDRCLK     PORTCbits.RC3
 
 typedef struct {
     menu_display_values *lcd_menu;

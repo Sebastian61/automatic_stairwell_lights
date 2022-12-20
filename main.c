@@ -29,9 +29,11 @@
 #include "74hc595.h"
 #include "lcd.h"
 #include "interrupt.h"
+#include "encoder_hal.h"
 
 void gpio_init(void);
 void adc_init(void);
+void interrupt_init(void);
 
 stairwell stairs;
 
@@ -39,6 +41,7 @@ void main(void) {
     gpio_init();
     lcd_init();
     adc_init();
+    encoder_init();
     __delay_us(100);
     __delay_ms(100);
     lcd_action();
@@ -49,20 +52,22 @@ void main(void) {
 
 void gpio_init(void) {
     //port A
-    ANSEL &= ~(_ANSEL_ANS2_MASK | _ANSEL_ANS3_MASK | _ANSEL_ANS1_MASK | _ANSEL_ANS0_MASK | _ANSEL_ANS5_MASK);    //set as digital I/O
+    ANSEL &= ~(_ANSEL_ANS1_MASK | _ANSEL_ANS0_MASK | _ANSEL_ANS5_MASK);    //set as digital I/O
     //port A outputs
-    PORTA &= ~(_PORTA_RA2_MASK | _PORTA_RA4_MASK);
-    TRISA &= ~(_PORTA_RA2_MASK | _PORTA_RA4_MASK);
     //port A inputs
     //no modifications to TRISA needed due to being default values
     IOCA |= (_IOCA_IOCA0_MASK | _IOCA_IOCA1_MASK | _IOCA_IOCA5_MASK);  //set interrupts for rotary encoder
+    //port B
     //port B output
-    PORTB &= ~(_PORTB_RB6_MASK | _PORTB_RB7_MASK);
-    TRISB &= ~(_PORTB_RB6_MASK | _PORTB_RB7_MASK);
     //port C
-    
+    PORTC &= ~(_PORTC_RC0_MASK | _PORTC_RC1_MASK | _PORTC_RC2_MASK | _PORTC_RC3_MASK);
+    TRISC &= ~(_TRISC_TRISC0_MASK | _TRISC_TRISC1_MASK | _TRISC_TRISC2_MASK | _TRISC_TRISC3_MASK);
 }
 
 void adc_init(void) {
+    
+}
+
+void interrupt_init(void) {
     
 }
