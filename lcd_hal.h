@@ -99,6 +99,9 @@ typedef struct {
 #define LCD_LINE_ONE            0x00
 #define LCD_LINE_TWO            0x40
 
+#define LCD_SHORT_DELAY         __delay_us(200)
+#define LCD_LONG_DELAY          __delay_ms(2)
+
 void lcd_set_data_four_bits(void);
 void lcd_display_character(uint8_t character_data);
 void lcd_set_command(uint8_t command);
