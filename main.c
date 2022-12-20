@@ -46,6 +46,14 @@ void main(void) {
 }
 
 void gpio_init(void) {
+    //port A output
+    ANSEL &= ~(_ANSEL_ANS2_MASK | _ANSEL_ANS3_MASK);    //set as digital I/O
+    PORTA &= ~(_PORTA_RA2_MASK | _PORTA_RA4_MASK);
+    TRISB &= ~(_PORTA_RA2_MASK | _PORTA_RA4_MASK);
+    //port B output
+    PORTB &= ~(_PORTB_RB6_MASK | _PORTB_RB7_MASK);
+    TRISB &= ~(_PORTB_RB6_MASK | _PORTB_RB7_MASK);
+    //port C
     
 }
 

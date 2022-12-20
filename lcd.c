@@ -15,7 +15,7 @@ void lcd_init() {
     lcd_set_command(ENTRY_MODE_SET);
     lcd_set_command(CLEAR_DISPLAY);
     __delay_ms(2);
-    lcd_send_string("Initializing...", 15);
+    lcd_send_string((uint8_t *)"Initializing...", 15);
 }
 
 void lcd_action(void){
