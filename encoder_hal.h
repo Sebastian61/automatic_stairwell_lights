@@ -10,11 +10,23 @@
 
 #include "main.h"
 
+typedef enum {
+    P0_STATE,
+    P1_STATE,
+    P2_STATE,
+    P1P2_STATE
+}encoder_state;
+
 typedef struct {
     uint8_t left_trigger;
     uint8_t right_trigger;
     uint8_t button_trigger;
+    encoder_state state;
+    encoder_state prev_state;
 }encoder_type;
+
+void encoder_init(void);
+encoder_state get_encoder_state(void);
 
 #ifdef	__cplusplus
 extern "C" {
