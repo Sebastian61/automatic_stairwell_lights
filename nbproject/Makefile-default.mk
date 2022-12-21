@@ -57,17 +57,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=main.c 74hc595.c lcd.c lcd_hal.c encoder_hal.c interrupt.c timer.c adc.c
+SOURCEFILES_QUOTED_IF_SPACED=main.c 74hc595.c lcd.c lcd_hal.c encoder_hal.c interrupt.c timer.c adc.c pwm.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/main.p1 ${OBJECTDIR}/74hc595.p1 ${OBJECTDIR}/lcd.p1 ${OBJECTDIR}/lcd_hal.p1 ${OBJECTDIR}/encoder_hal.p1 ${OBJECTDIR}/interrupt.p1 ${OBJECTDIR}/timer.p1 ${OBJECTDIR}/adc.p1
-POSSIBLE_DEPFILES=${OBJECTDIR}/main.p1.d ${OBJECTDIR}/74hc595.p1.d ${OBJECTDIR}/lcd.p1.d ${OBJECTDIR}/lcd_hal.p1.d ${OBJECTDIR}/encoder_hal.p1.d ${OBJECTDIR}/interrupt.p1.d ${OBJECTDIR}/timer.p1.d ${OBJECTDIR}/adc.p1.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/main.p1 ${OBJECTDIR}/74hc595.p1 ${OBJECTDIR}/lcd.p1 ${OBJECTDIR}/lcd_hal.p1 ${OBJECTDIR}/encoder_hal.p1 ${OBJECTDIR}/interrupt.p1 ${OBJECTDIR}/timer.p1 ${OBJECTDIR}/adc.p1 ${OBJECTDIR}/pwm.p1
+POSSIBLE_DEPFILES=${OBJECTDIR}/main.p1.d ${OBJECTDIR}/74hc595.p1.d ${OBJECTDIR}/lcd.p1.d ${OBJECTDIR}/lcd_hal.p1.d ${OBJECTDIR}/encoder_hal.p1.d ${OBJECTDIR}/interrupt.p1.d ${OBJECTDIR}/timer.p1.d ${OBJECTDIR}/adc.p1.d ${OBJECTDIR}/pwm.p1.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/main.p1 ${OBJECTDIR}/74hc595.p1 ${OBJECTDIR}/lcd.p1 ${OBJECTDIR}/lcd_hal.p1 ${OBJECTDIR}/encoder_hal.p1 ${OBJECTDIR}/interrupt.p1 ${OBJECTDIR}/timer.p1 ${OBJECTDIR}/adc.p1
+OBJECTFILES=${OBJECTDIR}/main.p1 ${OBJECTDIR}/74hc595.p1 ${OBJECTDIR}/lcd.p1 ${OBJECTDIR}/lcd_hal.p1 ${OBJECTDIR}/encoder_hal.p1 ${OBJECTDIR}/interrupt.p1 ${OBJECTDIR}/timer.p1 ${OBJECTDIR}/adc.p1 ${OBJECTDIR}/pwm.p1
 
 # Source Files
-SOURCEFILES=main.c 74hc595.c lcd.c lcd_hal.c encoder_hal.c interrupt.c timer.c adc.c
+SOURCEFILES=main.c 74hc595.c lcd.c lcd_hal.c encoder_hal.c interrupt.c timer.c adc.c pwm.c
 
 
 
@@ -158,6 +158,14 @@ ${OBJECTDIR}/adc.p1: adc.c  nbproject/Makefile-${CND_CONF}.mk
 	@-${MV} ${OBJECTDIR}/adc.d ${OBJECTDIR}/adc.p1.d 
 	@${FIXDEPS} ${OBJECTDIR}/adc.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
 	
+${OBJECTDIR}/pwm.p1: pwm.c  nbproject/Makefile-${CND_CONF}.mk 
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/pwm.p1.d 
+	@${RM} ${OBJECTDIR}/pwm.p1 
+	${MP_CC} $(MP_EXTRA_CC_PRE) -mcpu=$(MP_PROCESSOR_OPTION) -c  -D__DEBUG=1  -mdebugger=none   -mdfp="${DFP_DIR}/xc8"  -fno-short-double -fno-short-float -O0 -fasmfile -maddrqual=ignore -xassembler-with-cpp -mwarn=-3 -Wa,-a -DXPRJ_default=$(CND_CONF)  -msummary=-psect,-class,+mem,-hex,-file  -ginhx32 -Wl,--data-init -mno-keep-startup -mno-osccal -mno-resetbits -mno-save-resetbits -mno-download -mno-stackcall -mdefault-config-bits -mc90lib $(COMPARISON_BUILD)  -std=c90 -gdwarf-3 -mstack=compiled:auto:auto     -o ${OBJECTDIR}/pwm.p1 pwm.c 
+	@-${MV} ${OBJECTDIR}/pwm.d ${OBJECTDIR}/pwm.p1.d 
+	@${FIXDEPS} ${OBJECTDIR}/pwm.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
+	
 else
 ${OBJECTDIR}/main.p1: main.c  nbproject/Makefile-${CND_CONF}.mk 
 	@${MKDIR} "${OBJECTDIR}" 
@@ -222,6 +230,14 @@ ${OBJECTDIR}/adc.p1: adc.c  nbproject/Makefile-${CND_CONF}.mk
 	${MP_CC} $(MP_EXTRA_CC_PRE) -mcpu=$(MP_PROCESSOR_OPTION) -c   -mdfp="${DFP_DIR}/xc8"  -fno-short-double -fno-short-float -O0 -fasmfile -maddrqual=ignore -xassembler-with-cpp -mwarn=-3 -Wa,-a -DXPRJ_default=$(CND_CONF)  -msummary=-psect,-class,+mem,-hex,-file  -ginhx32 -Wl,--data-init -mno-keep-startup -mno-osccal -mno-resetbits -mno-save-resetbits -mno-download -mno-stackcall -mdefault-config-bits -mc90lib $(COMPARISON_BUILD)  -std=c90 -gdwarf-3 -mstack=compiled:auto:auto     -o ${OBJECTDIR}/adc.p1 adc.c 
 	@-${MV} ${OBJECTDIR}/adc.d ${OBJECTDIR}/adc.p1.d 
 	@${FIXDEPS} ${OBJECTDIR}/adc.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
+	
+${OBJECTDIR}/pwm.p1: pwm.c  nbproject/Makefile-${CND_CONF}.mk 
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/pwm.p1.d 
+	@${RM} ${OBJECTDIR}/pwm.p1 
+	${MP_CC} $(MP_EXTRA_CC_PRE) -mcpu=$(MP_PROCESSOR_OPTION) -c   -mdfp="${DFP_DIR}/xc8"  -fno-short-double -fno-short-float -O0 -fasmfile -maddrqual=ignore -xassembler-with-cpp -mwarn=-3 -Wa,-a -DXPRJ_default=$(CND_CONF)  -msummary=-psect,-class,+mem,-hex,-file  -ginhx32 -Wl,--data-init -mno-keep-startup -mno-osccal -mno-resetbits -mno-save-resetbits -mno-download -mno-stackcall -mdefault-config-bits -mc90lib $(COMPARISON_BUILD)  -std=c90 -gdwarf-3 -mstack=compiled:auto:auto     -o ${OBJECTDIR}/pwm.p1 pwm.c 
+	@-${MV} ${OBJECTDIR}/pwm.d ${OBJECTDIR}/pwm.p1.d 
+	@${FIXDEPS} ${OBJECTDIR}/pwm.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
 	
 endif
 

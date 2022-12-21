@@ -32,6 +32,7 @@
 #include "encoder_hal.h"
 #include "timer.h"
 #include "adc.h"
+#include "pwm.h"
 
 void gpio_init(void);
 void osc_init(void);
@@ -48,6 +49,7 @@ void main(void) {
     osc_init();
     gpio_init();
     lcd_init();
+    pwm_init();
     timer_init();
     adc_init();
     encoder_init();
@@ -66,16 +68,24 @@ void main(void) {
 void gpio_init(void) {
     //port A
     ANSEL &= ~(_ANSEL_ANS1_MASK | _ANSEL_ANS0_MASK | _ANSEL_ANS5_MASK);    //set as digital I/O
+    
     //port A outputs
+    
     //port A inputs
     //no modifications to TRISA needed due to being default values
+    
     //port B
     //port B output
+    
     //port C output
-    PORTC &= ~(_PORTC_RC0_MASK | _PORTC_RC1_MASK | _PORTC_RC2_MASK | _PORTC_RC3_MASK);                  //RC0-RC3 configured as outputs for serial ICs
-    TRISC &= ~(_TRISC_TRISC0_MASK | _TRISC_TRISC1_MASK | _TRISC_TRISC2_MASK | _TRISC_TRISC3_MASK);
+    //RC0-RC3 configured as outputs for serial ICs
+    //RC5 as output for PWM
+    PORTC &= ~(_PORTC_RC0_MASK | _PORTC_RC1_MASK | _PORTC_RC2_MASK | _PORTC_RC3_MASK | _PORTC_RC5_MASK);
+    TRISC &= ~(_TRISC_TRISC0_MASK | _TRISC_TRISC1_MASK | _TRISC_TRISC2_MASK | _TRISC_TRISC3_MASK | _TRISC_TRISC5_MASK);
+    
     //port C inputs
     TRISC |= (_TRISC_TRISC6_MASK | _TRISC_TRISC7_MASK); //inputs for ADC
+    
     //interrupts
     IOCA |= (_IOCA_IOCA0_MASK | _IOCA_IOCA1_MASK | _IOCA_IOCA5_MASK);  //set interrupts for rotary encoder
     INTCONbits.RABIE = 1; //pin change interrupts
