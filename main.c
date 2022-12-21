@@ -34,8 +34,7 @@
 #include "adc.h"
 
 void gpio_init(void);
-void interrupt_init(void);
-void timer_init(void);
+void osc_init(void);
 
 stairwell stairs;
 
@@ -46,12 +45,12 @@ static void interrupt myisr(void) {
 
 void main(void) {
     //init functions
+    osc_init();
     gpio_init();
     lcd_init();
     timer_init();
     adc_init();
     encoder_init();
-    
     
     timer1_on_off(1);
     while(1) {
@@ -72,14 +71,16 @@ void gpio_init(void) {
     //no modifications to TRISA needed due to being default values
     //port B
     //port B output
-    //port C
-    PORTC &= ~(_PORTC_RC0_MASK | _PORTC_RC1_MASK | _PORTC_RC2_MASK | _PORTC_RC3_MASK);
+    //port C output
+    PORTC &= ~(_PORTC_RC0_MASK | _PORTC_RC1_MASK | _PORTC_RC2_MASK | _PORTC_RC3_MASK);                  //RC0-RC3 configured as outputs for serial ICs
     TRISC &= ~(_TRISC_TRISC0_MASK | _TRISC_TRISC1_MASK | _TRISC_TRISC2_MASK | _TRISC_TRISC3_MASK);
+    //port C inputs
+    TRISC |= (_TRISC_TRISC6_MASK | _TRISC_TRISC7_MASK); //inputs for ADC
     //interrupts
     IOCA |= (_IOCA_IOCA0_MASK | _IOCA_IOCA1_MASK | _IOCA_IOCA5_MASK);  //set interrupts for rotary encoder
     INTCONbits.RABIE = 1; //pin change interrupts
 }
 
-void interrupt_init(void) {
-    
+void osc_init(void) {
+    OSCCONbits.IRCF = 0b111; //8Mhz
 }

@@ -8,7 +8,7 @@
 #ifndef TIMER_H
 #define	TIMER_H
 
-#include "main.h"
+#include "stdint.h"
 
 #ifdef	__cplusplus
 extern "C" {

@@ -1,5 +1,7 @@
 
 #include "timer.h"
+#include "stdint.h"
+#include "main.h"
 
 void timer_init(void) {
     //timer 0
@@ -9,7 +11,6 @@ void timer_init(void) {
     //this ensures timer interrupt will trigger every 0.2 seconds
     TMR1H = ((TIMER_PADDING >> 8) & 0x0F);
     TMR1L = (TIMER_PADDING & 0x0F);
-    INTCONbits.PEIE = 1;//enable peripheral interrupt
     PIE1bits.TMR1IE = 1;//enable timer interrupt
     return;
 }
