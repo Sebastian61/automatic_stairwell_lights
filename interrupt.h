@@ -8,11 +8,13 @@
 #ifndef INTERRUPT_H
 #define	INTERRUPT_H
 
+#include "main.h"
+
 #ifdef	__cplusplus
 extern "C" {
 #endif
 
-void interrupt myisr(void);
+void handle_interrupt(stairwell *stair);
 
 #ifdef	__cplusplus
 }

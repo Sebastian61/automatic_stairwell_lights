@@ -1,7 +1,6 @@
 #include "interrupt.h"
 #include "main.h"
 
-void interrupt myisr(void) {
-    
+void handle_interrupt(stairwell *stair) {
     return;
 }

@@ -31,20 +31,28 @@
 #include "interrupt.h"
 #include "encoder_hal.h"
 #include "timer.h"
+#include "adc.h"
 
 void gpio_init(void);
-void adc_init(void);
 void interrupt_init(void);
 void timer_init(void);
 
 stairwell stairs;
 
+static void interrupt myisr(void) {
+    handle_interrupt(&stairs);
+    return;
+}
+
 void main(void) {
+    //init functions
     gpio_init();
     lcd_init();
     timer_init();
     adc_init();
     encoder_init();
+    
+    
     timer1_on_off(1);
     while(1) {
         __delay_us(100);
@@ -70,10 +78,6 @@ void gpio_init(void) {
     //interrupts
     IOCA |= (_IOCA_IOCA0_MASK | _IOCA_IOCA1_MASK | _IOCA_IOCA5_MASK);  //set interrupts for rotary encoder
     INTCONbits.RABIE = 1; //pin change interrupts
-}
-
-void adc_init(void) {
-    
 }
 
 void interrupt_init(void) {
