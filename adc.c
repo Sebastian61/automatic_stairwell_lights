@@ -3,7 +3,7 @@
 #include "adc.h"
 #include "stdint.h"
 
-volatile adc_handle adc;
+adc_handle adc;
 
 void adc_init(void) {
     ADCON1bits.ADCS = 0b010;  //FOSC / 32

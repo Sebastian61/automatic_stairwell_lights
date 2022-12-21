@@ -37,10 +37,21 @@
 #define _XTAL_FREQ  8000000
 #define DATALEN     DATA_LENGTH_FOUR_BITS
 
+//serial data ports
 #define RCLK        PORTCbits.RC0
 #define SER         PORTCbits.RC1
 #define SRCLK       PORTCbits.RC2
 #define LEDRCLK     PORTCbits.RC3
+
+//nightlight ports
+#define NL_BLUE     PORTBbits.RB4
+#define NL_GREEN    PORTBbits.RB5
+#define NL_RED      PORTBbits.RB6
+#define NL_PWM      PORTCbits.RC5
+
+typedef enum {
+    RED, GREEN, BLUE, WHITE, YELLOW, TEAL, PURPLE
+}nl_color;
 
 typedef struct {
     menu_display_values *lcd_menu;

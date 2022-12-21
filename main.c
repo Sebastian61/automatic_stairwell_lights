@@ -36,6 +36,7 @@
 
 void gpio_init(void);
 void osc_init(void);
+void set_nlight_color(nl_color color);
 
 stairwell stairs;
 
@@ -56,6 +57,7 @@ void main(void) {
     
     timer1_on_off(1);
     while(1) {
+        set_nlight_color(GREEN);
         __delay_us(100);
         __delay_ms(100);
         lcd_action();
@@ -67,7 +69,8 @@ void main(void) {
 
 void gpio_init(void) {
     //port A
-    ANSEL &= ~(_ANSEL_ANS1_MASK | _ANSEL_ANS0_MASK | _ANSEL_ANS5_MASK);    //set as digital I/O
+    ANSEL &= ~(_ANSEL_ANS4_MASK | _ANSEL_ANS5_MASK | _ANSEL_ANS6_MASK | _ANSEL_ANS7_MASK);    //set as digital I/O
+    ANSELH &= ~(_ANSELH_ANS10_MASK | _ANSELH_ANS11_MASK);   //set as digital I/O
     
     //port A outputs
     
@@ -76,6 +79,9 @@ void gpio_init(void) {
     
     //port B
     //port B output
+    //RB4-RB6 configured as outputs for RGB nightlight;
+    PORTB &= ~(_PORTB_RB4_MASK | _PORTB_RB5_MASK | _PORTB_RB6_MASK);
+    TRISB &= ~(_TRISB_TRISB4_MASK | _TRISB_TRISB5_MASK | _TRISB_TRISB6_MASK);
     
     //port C output
     //RC0-RC3 configured as outputs for serial ICs
@@ -89,8 +95,67 @@ void gpio_init(void) {
     //interrupts
     IOCA |= (_IOCA_IOCA0_MASK | _IOCA_IOCA1_MASK | _IOCA_IOCA5_MASK);  //set interrupts for rotary encoder
     INTCONbits.RABIE = 1; //pin change interrupts
+    return;
 }
 
 void osc_init(void) {
     OSCCONbits.IRCF = 0b111; //8Mhz
+    return;
+}
+
+void set_nlight_color(nl_color color) {
+    NL_BLUE = 0;
+    NL_GREEN = 0;
+    NL_RED = 0;
+    
+//    if( color == TEAL |
+//        color == PURPLE |
+//        color == BLUE |
+//        color == WHITE) {
+//        NL_BLUE = 1;
+//    }
+//    
+//    if( color == GREEN |
+//        color == TEAL |
+//        color == YELLOW |
+//        color == WHITE) {
+//    NL_GREEN = 1;
+//    }
+//    
+//    if( color == RED |
+//        color == PURPLE |
+//        color == YELLOW |
+//        color == WHITE) {
+//    NL_RED = 1;
+//    }
+    
+    switch(color) { //this function is smaller than the other implementation //TODO check back here after optimizations
+        case TEAL:
+            NL_BLUE = 1;
+            NL_GREEN = 1;
+            break;
+        case PURPLE:
+            NL_BLUE = 1;
+            NL_RED = 1;
+            break;
+        case BLUE:
+            NL_BLUE = 1;
+            break;
+        case GREEN:
+            NL_GREEN = 1;
+            break;
+        case YELLOW:
+            NL_GREEN = 1;
+            NL_RED = 1;
+            break;
+        case RED:
+            NL_RED = 1;
+            break;
+        case WHITE:
+            NL_BLUE = 1;
+            NL_GREEN = 1;
+            NL_RED = 1;
+            break;
+    }
+    return;
 }

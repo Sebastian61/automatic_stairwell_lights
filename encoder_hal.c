@@ -1,6 +1,6 @@
 #include "encoder_hal.h"
 
-static encoder_type encoder;
+static encoder_handle encoder;
 
 void encoder_init(void) {
     

@@ -18,12 +18,9 @@ typedef enum {
 }encoder_state;
 
 typedef struct {
-    uint8_t left_trigger;
-    uint8_t right_trigger;
-    uint8_t button_trigger;
     encoder_state state;
     encoder_state prev_state;
-}encoder_type;
+}encoder_handle;
 
 void encoder_init(void);
 encoder_state get_encoder_state(void);
