@@ -37,7 +37,8 @@
 
 #define _XTAL_FREQ  8000000
 #define DATALEN     DATA_LENGTH_FOUR_BITS
-#define ADC_TIME    5 //1 second
+#define ADC_TIME    5 //1 second-
+#define STEP_NUMBER 20
 
 //serial data ports
 #define RCLK        PORTCbits.RC0   //TODO see if Pin configuration will influence programming
@@ -67,13 +68,17 @@
 #define LIGHT_UP    PORTCbits.RC6
 #define LIGHT_DOWN  PORTCbits.RC7
 
+//main light action masks
+#define ML_BOTTOM_UP_MASK   (1 << 0)
+#define ML_TOP_DOWN_MASK    (1 << 1)
+
 typedef enum {
     RED, GREEN, BLUE, WHITE, YELLOW, TEAL, PURPLE, NL_OFF
 }nl_color;
 
 typedef enum {
-    MLIGHT_OFF, MLIGHT_ON, MLIGHT_LIGHTING
-}mlight_status;
+    ML_OFF, ML_ALL_ON
+}ml_status;
 
 typedef struct {
     menu_display_values *lcd_menu;
@@ -87,11 +92,12 @@ typedef struct {
         uint8_t sensitivity;
     }night_light;
     struct {
-        uint32_t status;
+        uint32_t state;
         uint16_t duration;
         uint8_t on_speed;
         uint8_t pre_lighting;
-        mlight_status mlight_status;
+        uint8_t ml_action;
+        ml_status ml_status;
     }main_light;
 }stairwell;
 

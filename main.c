@@ -38,27 +38,57 @@ void gpio_init(void);
 void osc_init(void);
 void set_nlight_color(nl_color color);
 void stairs_init(void);
+void get_ml_action(uint8_t *action);
 
 stairwell stairs;
 
 static void interrupt myisr(void) {
     //timer interrupt
     if(PIR1bits.TMR1IF) {
+        PIR1bits.TMR1IF = 0;
+        
+        //handle daylight sensor polling
         if(--stairs.light_sensor_timer == 0) {
             stairs.light_sensor_timer = ADC_TIME;
             adc_start();
         }
+        
+        //handle light up interval
+        
+        //handle light up duration
     }
     
     //adc interrupt
     if(PIR1bits.ADIF) {
         PIR1bits.ADIF = 0;
+        
+        //handle ADC_interrupt
         adc_interrupt();
     }
     
     //IO interrupt
     if(INTCONbits.RABIF) {
+        INTCONbits.RABIF = 0;
+        //handle encoder
         stairs.enc_action = encoder_interrupt();
+        
+        //handle stair sensors
+        //if(stairs.main_light.status)
+        if(stairs.main_light.ml_status != ML_ALL_ON) {
+            get_ml_action(&stairs.main_light.ml_action);
+        }
+        
+        if(stairs.main_light.pre_lighting == 1) {
+            if(STAIR_UP1 == 1)
+                pwm_on(1);
+            else
+                pwm_off(1);
+            
+            if(STAIR_DOWN1 == 1)
+                pwm_on(2);
+            else
+                pwm_off(1);
+        }
     }
     return;
 }
@@ -209,9 +239,17 @@ void stairs_init(void) {
     stairs.main_light.duration = 600; //2 minutes
     stairs.main_light.on_speed = 1; //0.2 seconds
     stairs.main_light.pre_lighting = 1; //enable pre lighting
-    stairs.main_light.status = MLIGHT_OFF;
+    stairs.main_light.ml_action = 0;
     
     stairs.night_light.brightness = 0x80; 
     stairs.night_light.color = RED;
     stairs.night_light.sensitivity = 0x80;
+}
+
+void get_ml_action(uint8_t *action) {
+    if(STAIR_DOWN2 == 1)
+        *action |= ML_BOTTOM_UP_MASK;
+    if(STAIR_UP2 == 1)
+        *action |= ML_TOP_DOWN_MASK;
+    return;
 }
