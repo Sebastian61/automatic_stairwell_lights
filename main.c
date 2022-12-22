@@ -74,7 +74,20 @@ void main(void) {
         //check if LCD needs updating
         //check if values have changed
         //update values
-        if();
+        
+        //update night light
+        if(adc_read_value(1) > stairs.night_light.sensitivity)
+            pwm_on(1);
+        else
+            pwm_off(1);
+        if(adc_read_value(2) > stairs.night_light.sensitivity)
+            pwm_on(2);
+        else
+            pwm_off(2);
+        
+        set_nlight_color(stairs.night_light.color);
+        
+        
         __delay_us(100);
         __delay_ms(100);
         lcd_action();
@@ -174,7 +187,7 @@ void set_nlight_color(nl_color color) {
             NL_GREEN = 1;
             NL_RED = 1;
             break;
-        case OFF:
+        case NL_OFF:
             break;
     }
     return;
@@ -193,5 +206,4 @@ void stairs_init(void) {
     stairs.night_light.brightness = 0x80; 
     stairs.night_light.color = RED;
     stairs.night_light.sensitivity = 0x80;
-    stairs.night_light.nlight_status = NLIGHT_OFF;
 }

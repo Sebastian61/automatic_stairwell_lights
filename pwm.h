@@ -8,6 +8,8 @@
 #ifndef PWM_H
 #define	PWM_H
 
+#include "stdint.h"
+
 void pwm_init(void);
 void pwm_on(uint8_t no);
 void pwm_off(uint8_t no);

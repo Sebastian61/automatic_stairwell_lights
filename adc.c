@@ -33,7 +33,7 @@ void adc_start(void) {
 }
 
 uint8_t adc_read_value(uint8_t no) {
-    return (no == 1) ? adc.value1 : adc.value2;
+    return (no == 1u) ? adc.value1 : adc.value2;
 }
 
 void adc_interrupt(void) {

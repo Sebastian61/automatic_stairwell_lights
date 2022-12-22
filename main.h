@@ -67,12 +67,8 @@
 #define LIGHT_DOWN  PORTCbits.RC7
 
 typedef enum {
-    RED, GREEN, BLUE, WHITE, YELLOW, TEAL, PURPLE, OFF
+    RED, GREEN, BLUE, WHITE, YELLOW, TEAL, PURPLE, NL_OFF
 }nl_color;
-
-typedef enum {
-    NLIGHT_OFF, NLIGHT_ON
-}nlight_status;
 
 typedef enum {
     MLIGHT_OFF, MLIGHT_ON, MLIGHT_LIGHTING
@@ -87,7 +83,6 @@ typedef struct {
         uint8_t brightness;
         nl_color color;
         uint8_t sensitivity;
-        nlight_status nlight_status;
     }night_light;
     struct {
         uint32_t status;
