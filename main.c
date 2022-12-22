@@ -37,11 +37,20 @@
 void gpio_init(void);
 void osc_init(void);
 void set_nlight_color(nl_color color);
+void stairs_init(void);
 
 stairwell stairs;
 
 static void interrupt myisr(void) {
-    handle_interrupt(&stairs);
+    if(PIR1bits.TMR1IF) {
+        
+    }
+    if(PIR1bits.ADIF) {
+        
+    }
+    if(INTCONbits.RABIF) {
+        
+    }
     return;
 }
 
@@ -55,13 +64,15 @@ void main(void) {
     adc_init();
     encoder_init();
     
+    stairs_init();
     timer1_on_off(1);
     while(1) {
-        set_nlight_color(GREEN);
+        //check if LCD needs updating
+        //check if values have changed
+        
         __delay_us(100);
         __delay_ms(100);
         lcd_action();
-        stairs.main_light.duration;
         //    stair_action();
     }
     return;
@@ -158,4 +169,14 @@ void set_nlight_color(nl_color color) {
             break;
     }
     return;
+}
+
+void stairs_init(void) {
+    stairs.light_sensor_timer = 300; //1 minute
+    stairs.main_light.stairs_timer = 600;  //2 minutes
+    stairs.main_light.light_interval_timer = 1; //0.2 seconds
+    stairs.main_light.status = 0;
+    stairs.night_light.brightness = 0x80; 
+    stairs.night_light.color = RED;
+    stairs.night_light.sensitivity = 0x80;
 }

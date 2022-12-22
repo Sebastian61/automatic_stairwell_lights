@@ -55,14 +55,16 @@ typedef enum {
 
 typedef struct {
     menu_display_values *lcd_menu;
+    uint16_t light_sensor_timer;
     struct {
         uint8_t brightness;
-        uint8_t color;
+        nl_color color;
+        uint8_t sensitivity;
     }night_light;
     struct {
         uint32_t status;
-        uint8_t on_speed;
-        uint8_t duration;
+        uint16_t stairs_timer;
+        uint8_t light_interval_timer;
     }main_light;
 }stairwell;
 
