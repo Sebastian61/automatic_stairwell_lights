@@ -43,7 +43,14 @@ stairwell stairs;
 
 static void interrupt myisr(void) {
     if(PIR1bits.TMR1IF) {
-        
+        if(--stairs.light_interval_timer == 0) {
+            stairs.light_interval_timer = stairs.main_light.on_speed;
+            
+        }
+        if(--stairs.light_sensor_timer == 0) {
+            stairs.light_sensor_timer = stairs.main_light.duration;
+            
+        }
     }
     if(PIR1bits.ADIF) {
         
@@ -69,7 +76,7 @@ void main(void) {
     while(1) {
         //check if LCD needs updating
         //check if values have changed
-        
+        //update values
         __delay_us(100);
         __delay_ms(100);
         lcd_action();
@@ -79,14 +86,14 @@ void main(void) {
 }
 
 void gpio_init(void) {
-    //port A
-    ANSEL &= ~(_ANSEL_ANS4_MASK | _ANSEL_ANS5_MASK | _ANSEL_ANS6_MASK | _ANSEL_ANS7_MASK);    //set as digital I/O
+    //adc disabling
+    ANSEL &= ~(_ANSEL_ANS0_MASK | _ANSEL_ANS1_MASK | _ANSEL_ANS2_MASK | _ANSEL_ANS3_MASK | _ANSEL_ANS4_MASK | _ANSEL_ANS5_MASK | _ANSEL_ANS6_MASK | _ANSEL_ANS7_MASK);    //set as digital I/O
     ANSELH &= ~(_ANSELH_ANS10_MASK | _ANSELH_ANS11_MASK);   //set as digital I/O
     
     //port A outputs
     
     //port A inputs
-    //no modifications to TRISA needed due to being default values
+    //no modifications to TRISA needed due to input being the default value
     
     //port B
     //port B output
@@ -96,15 +103,17 @@ void gpio_init(void) {
     
     //port C output
     //RC0-RC3 configured as outputs for serial ICs
-    //RC5 as output for PWM
-    PORTC &= ~(_PORTC_RC0_MASK | _PORTC_RC1_MASK | _PORTC_RC2_MASK | _PORTC_RC3_MASK | _PORTC_RC5_MASK);
-    TRISC &= ~(_TRISC_TRISC0_MASK | _TRISC_TRISC1_MASK | _TRISC_TRISC2_MASK | _TRISC_TRISC3_MASK | _TRISC_TRISC5_MASK);
+    //RC4, RC5 as output for PWM
+    PORTC &= ~(_PORTC_RC0_MASK | _PORTC_RC1_MASK | _PORTC_RC2_MASK | _PORTC_RC3_MASK | _PORTC_RC4_MASK | _PORTC_RC5_MASK);
+    TRISC &= ~(_TRISC_TRISC0_MASK | _TRISC_TRISC1_MASK | _TRISC_TRISC2_MASK | _TRISC_TRISC3_MASK | _TRISC_TRISC4_MASK | _TRISC_TRISC5_MASK);
     
     //port C inputs
     TRISC |= (_TRISC_TRISC6_MASK | _TRISC_TRISC7_MASK); //inputs for ADC
     
     //interrupts
-    IOCA |= (_IOCA_IOCA0_MASK | _IOCA_IOCA1_MASK | _IOCA_IOCA5_MASK);  //set interrupts for rotary encoder
+    //set interrupts for rotary encoder and stair sensors
+    IOCA |= (_IOCA_IOCA0_MASK | _IOCA_IOCA1_MASK | _IOCA_IOCA2_MASK | _IOCA_IOCA3_MASK | _IOCA_IOCA4_MASK | _IOCA_IOCA5_MASK);  
+    IOCB |= (_IOCB_IOCB7_MASK);
     INTCONbits.RABIE = 1; //pin change interrupts
     return;
 }
@@ -173,10 +182,17 @@ void set_nlight_color(nl_color color) {
 
 void stairs_init(void) {
     stairs.light_sensor_timer = 300; //1 minute
-    stairs.main_light.stairs_timer = 600;  //2 minutes
-    stairs.main_light.light_interval_timer = 1; //0.2 seconds
+    stairs.stairs_timer = 600;  //2 minutes
+    stairs.light_interval_timer = 1; //0.2 seconds
+    
     stairs.main_light.status = 0;
+    stairs.main_light.duration = 600; //2 minutes
+    stairs.main_light.on_speed = 1; //0.2 seconds
+    stairs.main_light.pre_lighting = 1; //enable pre lighting
+    stairs.main_light.status = MLIGHT_OFF;
+    
     stairs.night_light.brightness = 0x80; 
     stairs.night_light.color = RED;
     stairs.night_light.sensitivity = 0x80;
+    stairs.night_light.nlight_status = NLIGHT_OFF;
 }

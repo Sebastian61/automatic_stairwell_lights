@@ -10,7 +10,7 @@ void pwm_init(void) {
     PSTRCONbits.STRA = 0;   //will only be needed when nightlight is on
     PSTRCONbits.STRB = 0;
     PSTRCONbits.STRC = 0;
-    PSTRCONbits.STRA = 0;
+    PSTRCONbits.STRD = 0;
     CCPR1L = 0x80; //Duty Cycle 50% CCP1CONbits.DC1B unused
     //enable timer 2 configurations
     //T2CONbits.TMR2ON; //turns on timer 2
