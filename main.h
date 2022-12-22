@@ -33,6 +33,7 @@
 
 #include <xc.h> // include processor files - each processor file is guarded.  
 #include "lcd_menu.h"
+#include "encoder_hal.h"
 
 #define _XTAL_FREQ  8000000
 #define DATALEN     DATA_LENGTH_FOUR_BITS
@@ -52,9 +53,9 @@
 #define NL_PWM_DOWN PORTCbits.RC5
 
 //encoder ports
-#define EN_LEFT     PORTAbits.RA0
-#define EN_RIGHT    PORTAbits.RA1
-#define EN_BUTTON   PORTAbits.RA2
+#define ENC_LEFT    PORTAbits.RA0
+#define ENC_RIGHT   PORTAbits.RA1
+#define ENC_BUTTON  PORTAbits.RA2
 
 //stair sensor ports
 #define STAIR_UP1   PORTAbits.RA3
@@ -79,6 +80,7 @@ typedef struct {
     uint16_t light_sensor_timer;
     uint16_t stairs_timer;
     uint8_t light_interval_timer;
+    encoder_action enc_action;
     struct {
         uint8_t brightness;
         nl_color color;

@@ -42,18 +42,23 @@ void stairs_init(void);
 stairwell stairs;
 
 static void interrupt myisr(void) {
+    //timer interrupt
     if(PIR1bits.TMR1IF) {
         if(--stairs.light_sensor_timer == 0) {
             stairs.light_sensor_timer = ADC_TIME;
             adc_start();
         }
     }
+    
+    //adc interrupt
     if(PIR1bits.ADIF) {
         PIR1bits.ADIF = 0;
         adc_interrupt();
     }
+    
+    //IO interrupt
     if(INTCONbits.RABIF) {
-        
+        stairs.enc_action = encoder_interrupt();
     }
     return;
 }
@@ -74,6 +79,8 @@ void main(void) {
         //check if LCD needs updating
         //check if values have changed
         //update values
+        
+        //update LCD
         
         //update night light
         if(adc_read_value(1) > stairs.night_light.sensitivity)
@@ -197,6 +204,7 @@ void stairs_init(void) {
     stairs.light_sensor_timer = ADC_TIME; //1 second
     stairs.stairs_timer = 600;  //2 minutes
     stairs.light_interval_timer = 1; //0.2 seconds
+    stairs.enc_action = ENC_IDLE;
     
     stairs.main_light.duration = 600; //2 minutes
     stairs.main_light.on_speed = 1; //0.2 seconds
