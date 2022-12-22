@@ -13,18 +13,22 @@ void pwm_init(void) {
     PSTRCONbits.STRD = 0;
     CCPR1L = 0x80; //Duty Cycle 50% CCP1CONbits.DC1B unused
     //enable timer 2 configurations
-    //T2CONbits.TMR2ON; //turns on timer 2
+    T2CONbits.TMR2ON = 1; //turns on timer 2
 }
 
 //turns PWM on on pin RC5/P1A
-void pwm_on(void) {
-    T2CONbits.TMR2ON = 1; //turns on timer 2
-    PSTRCONbits.STRA = 1;
+void pwm_on(uint8_t no) {
+    if(no == 1)
+        PSTRCONbits.STRA = 1;
+    else
+        PSTRCONbits.STRB = 1;
     return;
 }
 
-void pwm_off(void) {
-    PSTRCONbits.STRA = 0;
-    T2CONbits.TMR2ON = 0; //turns off timer 2
+void pwm_off(uint8_t no) {
+    if(no == 1)
+        PSTRCONbits.STRA = 0;
+    else
+        PSTRCONbits.STRB = 0;
     return;
 }

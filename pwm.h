@@ -9,8 +9,8 @@
 #define	PWM_H
 
 void pwm_init(void);
-void pwm_on(void);
-void pwm_off(void);
+void pwm_on(uint8_t no);
+void pwm_off(uint8_t no);
 
 #endif	/* PWM_H */
 

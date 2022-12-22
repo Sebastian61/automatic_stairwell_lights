@@ -43,17 +43,14 @@ stairwell stairs;
 
 static void interrupt myisr(void) {
     if(PIR1bits.TMR1IF) {
-        if(--stairs.light_interval_timer == 0) {
-            stairs.light_interval_timer = stairs.main_light.on_speed;
-            
-        }
         if(--stairs.light_sensor_timer == 0) {
-            stairs.light_sensor_timer = stairs.main_light.duration;
-            
+            stairs.light_sensor_timer = ADC_TIME;
+            adc_start();
         }
     }
     if(PIR1bits.ADIF) {
-        
+        PIR1bits.ADIF = 0;
+        adc_interrupt();
     }
     if(INTCONbits.RABIF) {
         
@@ -77,6 +74,7 @@ void main(void) {
         //check if LCD needs updating
         //check if values have changed
         //update values
+        if();
         __delay_us(100);
         __delay_ms(100);
         lcd_action();
@@ -176,16 +174,17 @@ void set_nlight_color(nl_color color) {
             NL_GREEN = 1;
             NL_RED = 1;
             break;
+        case OFF:
+            break;
     }
     return;
 }
 
 void stairs_init(void) {
-    stairs.light_sensor_timer = 300; //1 minute
+    stairs.light_sensor_timer = ADC_TIME; //1 second
     stairs.stairs_timer = 600;  //2 minutes
     stairs.light_interval_timer = 1; //0.2 seconds
     
-    stairs.main_light.status = 0;
     stairs.main_light.duration = 600; //2 minutes
     stairs.main_light.on_speed = 1; //0.2 seconds
     stairs.main_light.pre_lighting = 1; //enable pre lighting

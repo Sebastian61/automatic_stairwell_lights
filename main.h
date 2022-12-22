@@ -36,9 +36,10 @@
 
 #define _XTAL_FREQ  8000000
 #define DATALEN     DATA_LENGTH_FOUR_BITS
+#define ADC_TIME    5 //1 second
 
 //serial data ports
-#define RCLK        PORTCbits.RC0
+#define RCLK        PORTCbits.RC0   //TODO see if Pin configuration will influence programming
 #define SER         PORTCbits.RC1
 #define SRCLK       PORTCbits.RC2
 #define LEDRCLK     PORTCbits.RC3
@@ -66,7 +67,7 @@
 #define LIGHT_DOWN  PORTCbits.RC7
 
 typedef enum {
-    RED, GREEN, BLUE, WHITE, YELLOW, TEAL, PURPLE
+    RED, GREEN, BLUE, WHITE, YELLOW, TEAL, PURPLE, OFF
 }nl_color;
 
 typedef enum {
