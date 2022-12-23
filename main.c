@@ -101,22 +101,14 @@ static void interrupt myisr(void) {
         stairs.enc_action = encoder_interrupt();
         
         //handle stair sensors
-        
-        //handle daylight sensors
         if(stairs.main_light.ml_status != ML_ALL_ON) {
             get_ml_action(&stairs.main_light.ml_action);
         }
         
+        //handle daylight sensors
         if(stairs.main_light.pre_lighting == 1) {
-            if(STAIR_UP1 == 1)
-                pwm_on(1);
-            else
-                pwm_off(1);
-            
-            if(STAIR_DOWN1 == 1)
-                pwm_on(2);
-            else
-                pwm_off(1);
+            if(STAIR_UP1 == 1);
+            if(STAIR_DOWN1 == 1);
         }
     }
     return;
@@ -143,11 +135,11 @@ void main(void) {
         //update LCD
         
         //update night light
-        if(adc_read_value(1) > stairs.night_light.sensitivity)
+        if(adc_get_value(1) > stairs.night_light.sensitivity)
             pwm_on(1);
         else
             pwm_off(1);
-        if(adc_read_value(2) > stairs.night_light.sensitivity)
+        if(adc_get_value(2) > stairs.night_light.sensitivity)
             pwm_on(2);
         else
             pwm_off(2);
