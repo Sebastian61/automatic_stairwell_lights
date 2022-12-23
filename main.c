@@ -60,7 +60,7 @@ static void interrupt myisr(void) {
                 stairs.stairs_timer = stairs.main_light.duration;
                 stairs.main_light.ml_status = ML_TURNING_OFF;
                 stairs.main_light.target_state = 0;
-                //todo add light turn off direction;
+                //TODO add light turn off direction;
             }
         }
         else if(stairs.main_light.ml_status == ML_OFF) {
@@ -106,26 +106,38 @@ static void interrupt myisr(void) {
         if(stairs.main_light.ml_status != ML_ALL_ON) {
             if(STAIR_DOWN2 == 1) {
                 stairs.main_light.state |= 1u;
+                stairs.main_light.target_state = 0xFFFFFFFF;
                 stairs.main_light.ml_action |= ML_BOTTOM_UP_MASK;
+                stairs.main_light.ml_status = ML_TURNING_ON;
             }
             if(STAIR_UP2 == 1) {
                 stairs.main_light.state |= (1ul << STEP_NUMBER);
+                stairs.main_light.target_state = 0xFFFFFFFF;
                 stairs.main_light.ml_action |= ML_TOP_DOWN_MASK;
+                stairs.main_light.ml_status = ML_TURNING_ON;
             }
         }
         
         if(stairs.main_light.pre_lighting == 1) {
             if((STAIR_UP1 == 1) && (stairs.main_light.ml_status == ML_OFF)) {
-                stairs.main_light.target_state |= ((1ul << STEP_NUMBER) | (1ul << (STEP_NUMBER - 1)) | (1ul << (STEP_NUMBER - 1))); //turns on top three lights
+                stairs.main_light.target_state |= ((1ul << STEP_NUMBER) | 
+                                                    (1ul << (STEP_NUMBER - 1)) | 
+                                                    (1ul << (STEP_NUMBER - 1))); //turns on top three lights
+                stairs.main_light.ml_action |= ML_TOP_DOWN_MASK;
             }
-            else {
-                
+            else if(stairs.main_light.ml_status == ML_OFF) {
+                stairs.main_light.target_state &= ~((1ul << STEP_NUMBER) | 
+                                                    (1ul << (STEP_NUMBER - 1)) | 
+                                                    (1ul << (STEP_NUMBER - 1))); 
+                stairs.main_light.ml_action |= ML_BOTTOM_UP_MASK;
             }
             
             if((STAIR_DOWN1 == 1) && (stairs.main_light.ml_status == ML_OFF)) {
                 stairs.main_light.target_state |= 0b111; //turns on bottom three lights
-            }else {
+                stairs.main_light.ml_action |= ML_BOTTOM_UP_MASK;
+            }else if(stairs.main_light.ml_status == ML_OFF) {
                 stairs.main_light.target_state &= ~(0b111);
+                stairs.main_light.ml_action |= ML_TOP_DOWN_MASK;
             }
         }
     }
