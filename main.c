@@ -104,7 +104,14 @@ static void interrupt myisr(void) {
         
         //handle stair sensors
         if(stairs.main_light.ml_status != ML_ALL_ON) {
-            get_ml_action(&stairs.main_light.ml_action);
+            if(STAIR_DOWN2 == 1) {
+                stairs.main_light.state |= 1u;
+                stairs.main_light.ml_action |= ML_BOTTOM_UP_MASK;
+            }
+            if(STAIR_UP2 == 1) {
+                stairs.main_light.state |= (1ul << STEP_NUMBER);
+                stairs.main_light.ml_action |= ML_TOP_DOWN_MASK;
+            }
         }
         
         if(stairs.main_light.pre_lighting == 1) {
@@ -289,10 +296,6 @@ void stairs_init(void) {
 }
 
 inline void get_ml_action(uint8_t *action) {
-    if(STAIR_DOWN2 == 1)
-        *action |= ML_BOTTOM_UP_MASK;
-    if(STAIR_UP2 == 1)
-        *action |= ML_TOP_DOWN_MASK;
     return;
 }
 
