@@ -38,7 +38,7 @@ void gpio_init(void);
 void osc_init(void);
 void set_nlight_color(nl_color color);
 void stairs_init(void);
-void get_ml_action(uint8_t *action);
+inline void get_ml_action(uint8_t *action);
 void update_stairs(uint32_t light_state);
 
 stairwell stairs;
@@ -111,8 +111,14 @@ static void interrupt myisr(void) {
             if((STAIR_UP1 == 1) && (stairs.main_light.ml_status == ML_OFF)) {
                 stairs.main_light.target_state |= ((1ul << STEP_NUMBER) | (1ul << (STEP_NUMBER - 1)) | (1ul << (STEP_NUMBER - 1))); //turns on top three lights
             }
+            else {
+                
+            }
+            
             if((STAIR_DOWN1 == 1) && (stairs.main_light.ml_status == ML_OFF)) {
                 stairs.main_light.target_state |= 0b111; //turns on bottom three lights
+            }else {
+                stairs.main_light.target_state &= ~(0b111);
             }
         }
     }
@@ -158,9 +164,9 @@ void main(void) {
         
         set_nlight_color(stairs.night_light.color);
         
-        
-        __delay_us(100);
-        __delay_ms(100);
+//        
+//        __delay_us(100);
+//        __delay_ms(100);
         //lcd_action();
     }
     return;
@@ -282,7 +288,7 @@ void stairs_init(void) {
     stairs.night_light.adc_time = 5; //1 second
 }
 
-void get_ml_action(uint8_t *action) {
+inline void get_ml_action(uint8_t *action) {
     if(STAIR_DOWN2 == 1)
         *action |= ML_BOTTOM_UP_MASK;
     if(STAIR_UP2 == 1)
