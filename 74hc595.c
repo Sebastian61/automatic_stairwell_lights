@@ -14,7 +14,7 @@ static void push_to_serial(uint8_t *output, uint8_t len) {
     }
 }
 
-void push_to_leds(uint32_t led) {
+void push_to_led(uint32_t led) {
     push_to_serial((uint8_t *)&led, 5);
     LEDRCLK = 1;
     LEDRCLK = 0;

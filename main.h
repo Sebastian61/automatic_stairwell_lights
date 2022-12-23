@@ -37,7 +37,6 @@
 
 #define _XTAL_FREQ  8000000
 #define DATALEN     DATA_LENGTH_FOUR_BITS
-#define ADC_TIME    5 //1 second-
 #define STEP_NUMBER 20
 
 //serial data ports
@@ -77,7 +76,7 @@ typedef enum {
 }nl_color;
 
 typedef enum {
-    ML_OFF, ML_ALL_ON
+    ML_OFF, ML_TURNING_OFF, ML_ALL_ON, ML_TURNING_ON
 }ml_status;
 
 typedef struct {
@@ -90,9 +89,11 @@ typedef struct {
         uint8_t brightness;
         nl_color color;
         uint8_t sensitivity;
+        uint8_t adc_time;
     }night_light;
     struct {
         uint32_t state;
+        uint32_t target_state;
         uint16_t duration;
         uint8_t on_speed;
         uint8_t pre_lighting;

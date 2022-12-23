@@ -39,6 +39,7 @@ void osc_init(void);
 void set_nlight_color(nl_color color);
 void stairs_init(void);
 void get_ml_action(uint8_t *action);
+void update_stairs(uint32_t light_state);
 
 stairwell stairs;
 
@@ -49,11 +50,19 @@ static void interrupt myisr(void) {
         
         //handle daylight sensor polling
         if(--stairs.light_sensor_timer == 0) {
-            stairs.light_sensor_timer = ADC_TIME;
+            stairs.light_sensor_timer = stairs.night_light.adc_time;
             adc_start();
         }
         
         //handle light up interval
+        if(--stairs.light_interval_timer == 0) {
+            if(stairs.main_light.ml_action & ML_BOTTOM_UP_MASK) {
+                stairs.main_light.target_state |= (stairs.main_light.state << 1);
+            }
+            if(stairs.main_light.ml_action & ML_TOP_DOWN_MASK) {
+                stairs.main_light.target_state |= (stairs.main_light.state >> 1);
+            }
+        }
         
         //handle light up duration
     }
@@ -73,7 +82,6 @@ static void interrupt myisr(void) {
         stairs.enc_action = encoder_interrupt();
         
         //handle stair sensors
-        //if(stairs.main_light.status)
         if(stairs.main_light.ml_status != ML_ALL_ON) {
             get_ml_action(&stairs.main_light.ml_action);
         }
@@ -108,7 +116,8 @@ void main(void) {
     while(1) {
         //check if LCD needs updating
         //check if values have changed
-        //update values
+        //update stair lights
+        update_stairs(stairs.main_light.state);
         
         //update LCD
         
@@ -231,7 +240,7 @@ void set_nlight_color(nl_color color) {
 }
 
 void stairs_init(void) {
-    stairs.light_sensor_timer = ADC_TIME; //1 second
+    stairs.light_sensor_timer = 5; //1 second
     stairs.stairs_timer = 600;  //2 minutes
     stairs.light_interval_timer = 1; //0.2 seconds
     stairs.enc_action = ENC_IDLE;
@@ -240,10 +249,13 @@ void stairs_init(void) {
     stairs.main_light.on_speed = 1; //0.2 seconds
     stairs.main_light.pre_lighting = 1; //enable pre lighting
     stairs.main_light.ml_action = 0;
+    stairs.main_light.state = 0;
+    stairs.main_light.target_state = 0;
     
     stairs.night_light.brightness = 0x80; 
     stairs.night_light.color = RED;
     stairs.night_light.sensitivity = 0x80;
+    stairs.night_light.adc_time = 5; //1 second
 }
 
 void get_ml_action(uint8_t *action) {
@@ -251,5 +263,22 @@ void get_ml_action(uint8_t *action) {
         *action |= ML_BOTTOM_UP_MASK;
     if(STAIR_UP2 == 1)
         *action |= ML_TOP_DOWN_MASK;
+    return;
+}
+
+void update_stairs(uint32_t stair_state) {
+//    stair_state = ((stair_state & 0xFFFF0000) >> 16) | ((stair_state & 0x0000FFFF) << 16);  //this take 400 lines lmao
+//    stair_state = ((stair_state & 0xFF00FF00) >> 8) | ((stair_state & 0x00FF00FF) << 8);
+//    stair_state = ((stair_state & 0xF0F0F0F0) >> 4) | ((stair_state & 0x0F0F0F0F) << 4);
+//    stair_state = ((stair_state & 0xCCCCCCCC) >> 2) | ((stair_state & 0x33333333) << 2);
+//    stair_state = ((stair_state & 0xAAAAAAAA) >> 1) | ((stair_state & 0x55555555) << 1);
+    
+    uint32_t temp = 0;  //this uses 80 lines
+    for(uint8_t i = 0; i < 32; ++i) {
+        temp <<= 1;
+        temp |= (stair_state & 1u);
+        stair_state >>= 1;
+    }
+    push_to_led(temp);
     return;
 }
