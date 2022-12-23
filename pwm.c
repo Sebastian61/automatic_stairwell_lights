@@ -14,6 +14,7 @@ void pwm_init(void) {
     CCPR1L = 0x80; //Duty Cycle 50% CCP1CONbits.DC1B unused
     //enable timer 2 configurations
     T2CONbits.TMR2ON = 1; //turns on timer 2
+    return;
 }
 
 //turns PWM on on pin RC5/P1A

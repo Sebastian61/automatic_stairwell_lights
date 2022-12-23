@@ -28,19 +28,17 @@ void lcd_set_data_four_bits(void) {
     push_to_lcd(&output);
     output &= ~LCD_EN;
     push_to_lcd(&output); 
-}
-
-void lcd_display_character(uint8_t character_data) {
-    working_data.data_type = (WRITE | DATA);
-    working_data.data = character_data;
-    lcd_send_byte(&working_data);
+    return;
 }
 
 void lcd_send_string(uint8_t *str_data, uint8_t str_length) {
     for(uint8_t i = 1; i < str_length; ++i) {
-        lcd_display_character(*str_data);
+        working_data.data_type = (WRITE | DATA);
+        working_data.data = *str_data;
+        lcd_send_byte(&working_data);
         ++str_data;
     }
+    return;
 }                                                                                                                                                                                                                                                                                                                                                   
 
 void lcd_set_command(uint8_t command) {

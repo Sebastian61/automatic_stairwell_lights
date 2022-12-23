@@ -59,6 +59,8 @@ static void interrupt myisr(void) {
             if(--stairs.stairs_timer == 0) {
                 stairs.stairs_timer = stairs.main_light.duration;
                 stairs.main_light.ml_status = ML_TURNING_OFF;
+                stairs.main_light.target_state = 0;
+                //todo add light turn off direction;
             }
         }
         else if(stairs.main_light.ml_status == ML_OFF) {
@@ -105,10 +107,9 @@ static void interrupt myisr(void) {
             get_ml_action(&stairs.main_light.ml_action);
         }
         
-        //handle daylight sensors
         if(stairs.main_light.pre_lighting == 1) {
             if((STAIR_UP1 == 1) && (stairs.main_light.ml_status == ML_OFF)) {
-                stairs.main_light.target_state |= ((1 << STEP_NUMBER) | (1 << (STEP_NUMBER - 1)) | (1 << (STEP_NUMBER - 1))); //turns on top three lights
+                stairs.main_light.target_state |= ((1ul << STEP_NUMBER) | (1ul << (STEP_NUMBER - 1)) | (1ul << (STEP_NUMBER - 1))); //turns on top three lights
             }
             if((STAIR_DOWN1 == 1) && (stairs.main_light.ml_status == ML_OFF)) {
                 stairs.main_light.target_state |= 0b111; //turns on bottom three lights
@@ -137,6 +138,10 @@ void main(void) {
         if(stairs.main_light.ml_action & ML_UPDATE_MASK) {
             stairs.main_light.ml_action &= ~ML_UPDATE_MASK;
             update_stairs(stairs.main_light.state);
+            if(stairs.main_light.state == stairs.main_light.target_state) {       //TODO could only be the pre-lighting
+                stairs.main_light.ml_action = 0;    //no further actions needed
+                stairs.main_light.ml_status = (stairs.main_light.target_state != 0) ? ML_OFF : ML_ALL_ON;
+            }
         }
         
         //update LCD
@@ -156,7 +161,7 @@ void main(void) {
         
         __delay_us(100);
         __delay_ms(100);
-        lcd_action();
+        //lcd_action();
     }
     return;
 }

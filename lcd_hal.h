@@ -103,7 +103,6 @@ typedef struct {
 #define LCD_LONG_DELAY          __delay_ms(2)
 
 void lcd_set_data_four_bits(void);
-void lcd_display_character(uint8_t character_data);
 void lcd_set_command(uint8_t command);
 void lcd_send_string(uint8_t *str_data, uint8_t str_length);
 void lcd_move_cursor(uint8_t line, uint8_t offset);
