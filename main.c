@@ -54,17 +54,35 @@ static void interrupt myisr(void) {
             adc_start();
         }
         
-        //handle light up interval
-        if(--stairs.light_interval_timer == 0) {
-            if(stairs.main_light.ml_action & ML_BOTTOM_UP_MASK) {
-                stairs.main_light.target_state |= (stairs.main_light.state << 1);
+        //handle light up duration
+        if(stairs.main_light.ml_status == ML_ALL_ON) {
+            if(--stairs.stairs_timer == 0) {
+                stairs.stairs_timer = stairs.main_light.duration;
+                stairs.main_light.ml_status = ML_TURNING_OFF;
             }
-            if(stairs.main_light.ml_action & ML_TOP_DOWN_MASK) {
+        }
+        else if(stairs.main_light.ml_status == ML_OFF) {
+            //no nothing
+        }
+        
+        //handle light up interval
+        else if(--stairs.light_interval_timer == 0) {
+            stairs.light_interval_timer = stairs.main_light.on_speed;
+            if((stairs.main_light.ml_action & ML_BOTTOM_UP_MASK) & (stairs.main_light.ml_status == ML_TURNING_ON)) {
+                stairs.main_light.target_state |= (stairs.main_light.state << 1);
+            } 
+            else {
+                stairs.main_light.target_state &= (stairs.main_light.state << 1);
+            }
+            
+            if((stairs.main_light.ml_action & ML_TOP_DOWN_MASK) & (stairs.main_light.ml_status == ML_TURNING_ON)) {
                 stairs.main_light.target_state |= (stairs.main_light.state >> 1);
+            }
+            else {
+                stairs.main_light.target_state &= (stairs.main_light.state >> 1);
             }
         }
         
-        //handle light up duration
     }
     
     //adc interrupt
@@ -78,10 +96,13 @@ static void interrupt myisr(void) {
     //IO interrupt
     if(INTCONbits.RABIF) {
         INTCONbits.RABIF = 0;
+        
         //handle encoder
         stairs.enc_action = encoder_interrupt();
         
         //handle stair sensors
+        
+        //handle daylight sensors
         if(stairs.main_light.ml_status != ML_ALL_ON) {
             get_ml_action(&stairs.main_light.ml_action);
         }
