@@ -69,20 +69,20 @@ static void interrupt myisr(void) {
         else if(--stairs.light_interval_timer == 0) {
             stairs.light_interval_timer = stairs.main_light.on_speed;
             if((stairs.main_light.ml_action & ML_BOTTOM_UP_MASK) & (stairs.main_light.ml_status == ML_TURNING_ON)) {
-                stairs.main_light.target_state |= (stairs.main_light.state << 1);
+                stairs.main_light.state |= (stairs.main_light.state << 1);
             } 
             else {
-                stairs.main_light.target_state &= (stairs.main_light.state << 1);
+                stairs.main_light.state &= (stairs.main_light.state << 1);
             }
             
             if((stairs.main_light.ml_action & ML_TOP_DOWN_MASK) & (stairs.main_light.ml_status == ML_TURNING_ON)) {
-                stairs.main_light.target_state |= (stairs.main_light.state >> 1);
+                stairs.main_light.state |= (stairs.main_light.state >> 1);
             }
             else {
-                stairs.main_light.target_state &= (stairs.main_light.state >> 1);
+                stairs.main_light.state &= (stairs.main_light.state >> 1);
             }
+            stairs.main_light.ml_action |= ML_UPDATE_MASK;
         }
-        
     }
     
     //adc interrupt
@@ -107,8 +107,12 @@ static void interrupt myisr(void) {
         
         //handle daylight sensors
         if(stairs.main_light.pre_lighting == 1) {
-            if(STAIR_UP1 == 1);
-            if(STAIR_DOWN1 == 1);
+            if((STAIR_UP1 == 1) && (stairs.main_light.ml_status == ML_OFF)) {
+                stairs.main_light.target_state |= ((1 << STEP_NUMBER) | (1 << (STEP_NUMBER - 1)) | (1 << (STEP_NUMBER - 1))); //turns on top three lights
+            }
+            if((STAIR_DOWN1 == 1) && (stairs.main_light.ml_status == ML_OFF)) {
+                stairs.main_light.target_state |= 0b111; //turns on bottom three lights
+            }
         }
     }
     return;
@@ -130,7 +134,10 @@ void main(void) {
         //check if LCD needs updating
         //check if values have changed
         //update stair lights
-        update_stairs(stairs.main_light.state);
+        if(stairs.main_light.ml_action & ML_UPDATE_MASK) {
+            stairs.main_light.ml_action &= ~ML_UPDATE_MASK;
+            update_stairs(stairs.main_light.state);
+        }
         
         //update LCD
         
@@ -150,7 +157,6 @@ void main(void) {
         __delay_us(100);
         __delay_ms(100);
         lcd_action();
-        //    stair_action();
     }
     return;
 }

@@ -32,7 +32,7 @@ void adc_start(void) {
     return;
 }
 
-uint8_t adc_read_value(uint8_t no) {
+uint8_t adc_get_value(uint8_t no) {
     return (no == 1u) ? adc.value1 : adc.value2;
 }
 

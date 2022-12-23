@@ -37,7 +37,7 @@
 
 #define _XTAL_FREQ  8000000
 #define DATALEN     DATA_LENGTH_FOUR_BITS
-#define STEP_NUMBER 20
+#define STEP_NUMBER (20 - 1)
 
 //serial data ports
 #define RCLK        PORTCbits.RC0   //TODO see if Pin configuration will influence programming
@@ -70,9 +70,10 @@
 //main light action masks
 #define ML_BOTTOM_UP_MASK   (1 << 0)
 #define ML_TOP_DOWN_MASK    (1 << 1)
+#define ML_UPDATE_MASK      (1 << 7)
 
 typedef enum {
-    RED, GREEN, BLUE, WHITE, YELLOW, TEAL, PURPLE, NL_OFF
+    NL_OFF, RED, GREEN, BLUE, WHITE, YELLOW, TEAL, PURPLE
 }nl_color;
 
 typedef enum {

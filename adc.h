@@ -26,7 +26,7 @@ typedef struct {
 
 void adc_init(void);
 void adc_start(void);
-uint8_t adc_read_value(uint8_t no);
+uint8_t adc_get_value(uint8_t no);
 void adc_interrupt(void);
 
 #endif	/* ADC_H */
