@@ -35,6 +35,8 @@
 #include "lcd_menu.h"
 #include "encoder_hal.h"
 
+#define enable_global_interrupt(n)      INTCONbits.GIE = n;
+
 #define _XTAL_FREQ  8000000
 #define DATALEN     DATA_LENGTH_FOUR_BITS
 #define STEP_NUMBER (20 - 1)
