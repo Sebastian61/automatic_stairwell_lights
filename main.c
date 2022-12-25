@@ -67,8 +67,12 @@ static void interrupt myisr(void) {
             }
         }
         
-        else if(stairs.main_light.ml_status == ML_OFF) {
-            //no nothing
+//        else if(stairs.main_light.ml_status == ML_OFF) {
+//            //no nothing
+//        }
+        
+        else if(stairs.main_light.target_state == stairs.main_light.state) {
+            //do nothing
         }
         
         //handle light up interval
@@ -87,6 +91,7 @@ static void interrupt myisr(void) {
             else {
                 stairs.main_light.state &= (stairs.main_light.state >> 1);
             }
+            
             stairs.main_light.ml_action |= ML_UPDATE_MASK;
         }
     }

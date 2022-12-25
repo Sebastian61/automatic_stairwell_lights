@@ -4,7 +4,7 @@
 #include "main.h"
 
 //this pushes len number of bytes in output to serialized 595s
-static void push_to_serial(uint8_t *output, uint8_t len) {
+static void push_to_serial(uint8_t *output, uint8_t len) {//TODO change to inline if stack should overflow
     for (uint8_t j = 0; j < len; ++j) {
         for (uint8_t i = 0; i < 8; ++i) {
             if(*output & (1u << i)) 
