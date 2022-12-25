@@ -73,7 +73,7 @@
 #define ML_BOTTOM_UP_MASK   (1 << 0)
 #define ML_TOP_DOWN_MASK    (1 << 1)
 #define ML_UPDATE_MASK      (1 << 7)
-#define ML_INIT_TRIG        (1 << 6)    //if 1 light was triggered with a top sensor
+#define ML_INIT_TRIG        (1 << 6)    //if 1 light was triggered with a bottom sensor
 
 typedef enum {
     NL_OFF, RED, GREEN, BLUE, WHITE, YELLOW, TEAL, PURPLE
@@ -92,7 +92,8 @@ typedef struct {
     struct {
         uint8_t brightness;
         nl_color color;
-        uint8_t sensitivity;
+        uint8_t sensitivity1;
+        uint8_t sensitivity2;
         uint8_t adc_time;
     }night_light;
     struct {

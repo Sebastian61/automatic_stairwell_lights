@@ -60,9 +60,13 @@ static void interrupt myisr(void) {
                 stairs.stairs_timer = stairs.main_light.duration;
                 stairs.main_light.ml_status = ML_TURNING_OFF;
                 stairs.main_light.target_state = 0;
-                //TODO add light turn off direction;
+                if(stairs.main_light.ml_action & ML_INIT_TRIG)
+                    stairs.main_light.ml_action |= ML_BOTTOM_UP_MASK;
+                else
+                    stairs.main_light.ml_action |= ML_TOP_DOWN_MASK;
             }
         }
+        
         else if(stairs.main_light.ml_status == ML_OFF) {
             //no nothing
         }
@@ -102,7 +106,7 @@ static void interrupt myisr(void) {
         //handle encoder
         stairs.enc_action = encoder_interrupt();
         
-        //handle stair sensors
+        //handle stair sensors outer level
         if((stairs.main_light.pre_lighting == 1) && (stairs.main_light.ml_status == ML_OFF)) {
             if(STAIR_UP1 == 1) {
                 stairs.main_light.target_state |= ((1ul << STEP_NUMBER) | 
@@ -123,10 +127,11 @@ static void interrupt myisr(void) {
             stairs.main_light.ml_status |= ML_UPDATE_MASK;
         }
         
+        //handle stair sensors inner level
         if(stairs.main_light.ml_status != ML_ALL_ON) {
             if(STAIR_DOWN2 == 1) {
                 stairs.main_light.target_state = 0xFFFFFFFF;
-                stairs.main_light.ml_action |= ML_BOTTOM_UP_MASK;
+                stairs.main_light.ml_action |= (ML_BOTTOM_UP_MASK | ML_INIT_TRIG);
                 stairs.main_light.state |= 0x01;
                 stairs.main_light.ml_status = ML_TURNING_ON;
             }
@@ -161,7 +166,7 @@ void main(void) {
             stairs.main_light.ml_action &= ~ML_UPDATE_MASK;
             update_stairs(stairs.main_light.state);
             if(stairs.main_light.state == stairs.main_light.target_state) {       //TODO could only be the pre-lighting
-                stairs.main_light.ml_action = 0;    //no further actions needed
+                stairs.main_light.ml_action &= ~(ML_BOTTOM_UP_MASK | ML_TOP_DOWN_MASK);    //clear action queue
                 stairs.main_light.ml_status = (stairs.main_light.target_state == 0xFFFFFFFF) ? ML_ALL_ON : ML_OFF;
             }
         }
@@ -169,14 +174,23 @@ void main(void) {
         //update LCD
         
         //update night light
-        if(adc_get_value(1) > stairs.night_light.sensitivity)
+        if(adc_get_value(1) > stairs.night_light.sensitivity1) {
+            stairs.night_light.sensitivity1 -= 10;
             pwm_on(1);
-        else
+        }
+        else {
+            stairs.night_light.sensitivity1 += 10;
             pwm_off(1);
-        if(adc_get_value(2) > stairs.night_light.sensitivity)
+        }
+        
+        if(adc_get_value(2) > stairs.night_light.sensitivity2) {
+            stairs.night_light.sensitivity2 -= 10;
             pwm_on(2);
-        else
+        }
+        else {
+            stairs.night_light.sensitivity2 += 10;
             pwm_off(2);
+        }
         
         set_nlight_color(stairs.night_light.color);
         
@@ -300,7 +314,8 @@ void stairs_init(void) {
     
     stairs.night_light.brightness = 0x80; 
     stairs.night_light.color = RED;
-    stairs.night_light.sensitivity = 0x80;
+    stairs.night_light.sensitivity1 = 0x80;
+    stairs.night_light.sensitivity2 = 0x80;
     stairs.night_light.adc_time = 5; //1 second
 }
 

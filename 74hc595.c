@@ -7,7 +7,10 @@
 static void push_to_serial(uint8_t *output, uint8_t len) {
     for (uint8_t j = 0; j < len; ++j) {
         for (uint8_t i = 0; i < 8; ++i) {
-            SER = ((*output << i) & 1u) ? 1u : 0u;
+            if(*output & (1u << i)) 
+                SER = 1;
+            else
+                SER = 0;
             SRCLK = 1;
             SRCLK = 0;
         }
