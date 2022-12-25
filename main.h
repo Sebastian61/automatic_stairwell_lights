@@ -73,6 +73,7 @@
 #define ML_BOTTOM_UP_MASK   (1 << 0)
 #define ML_TOP_DOWN_MASK    (1 << 1)
 #define ML_UPDATE_MASK      (1 << 7)
+#define ML_INIT_TRIG        (1 << 6)    //if 1 light was triggered with a top sensor
 
 typedef enum {
     NL_OFF, RED, GREEN, BLUE, WHITE, YELLOW, TEAL, PURPLE
