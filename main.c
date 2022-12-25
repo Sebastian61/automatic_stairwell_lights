@@ -162,6 +162,7 @@ void main(void) {
     encoder_init();
     
     stairs_init();
+    menu_init();
     timer1_on_off(1);
     while(1) {
         //check if LCD needs updating
@@ -177,6 +178,9 @@ void main(void) {
         }
         
         //update LCD
+        if(stairs.enc_action != ENC_IDLE) {
+            lcd_handler(&stairs.enc_action);
+        }
         
         //update night light
         if(adc_get_value(1) > stairs.night_light.sensitivity1) {
@@ -309,6 +313,7 @@ void stairs_init(void) {
     stairs.stairs_timer = 600;  //2 minutes
     stairs.light_interval_timer = 1; //0.2 seconds
     stairs.enc_action = ENC_IDLE;
+    stairs.sys_status = SYS_NORMAL;
     
     stairs.main_light.duration = 600; //2 minutes
     stairs.main_light.on_speed = 1; //0.2 seconds

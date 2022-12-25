@@ -35,18 +35,33 @@
 
 #define MENU_ITEM_NUMBER                        6
 
-#define MENU_NIGHTLIGHT_BRIGHTNESS              "NLight Brightnes"
-#define MENU_NIGHTLIGHT_COLOR                   "NLight Color"
-#define MENU_LIGHT_UP_SPEED                     "Light Up Speed"
-#define MENU_LIGHT_DURATION                     "Light Duration"
-#define MENU_DAYLIGHT_SENSITIVITY               "NLight Sentivity"
-#define MENU_PRELIGHTING                        "Prelighting"
+//MENU STRINGS
+#define MENU_NIGHTLIGHT_BRIGHTNESS_STR          "NLight Brightnes"
+#define MENU_NIGHTLIGHT_COLOR_STR               "NLight Color"
+#define MENU_LIGHT_UP_SPEED_STR                 "Light Up Speed"
+#define MENU_LIGHT_DURATION_STR                 "Light Duration"
+#define MENU_DAYLIGHT_SENSITIVITY_STR           "NLight Sentivity"
+#define MENU_PRELIGHTING_STR                    "Prelighting"
+
+//SYSTEM STATUS
+#define MENU_SYS_ERROR_STR                      "ERROR"
+#define MENU_SYS_NORMAL_STR                     "NORMAL"
+
+typedef enum {
+    MENU_MAIN, MENU_SETTINGS, MENU_SETTINGS_NL_BRIGHTNESS, MENU_SETTINGS_NL_COLOR, MENU_SETTINGS_ML_PRELIGHTING,
+    MENU_SETTINGS_ML_DURATION, MENU_SETTINGS_ML_ONSPEED, MENU_SETTINGS_NL_SENSITIVITY
+}menu_screen;
 
 typedef struct{
     uint8_t *nlight_brightness;
     uint8_t *nlight_color;
     uint8_t menu_index;
 }menu_display_values;
+
+typedef struct{
+    menu_screen screen;
+    uint8_t setting_index;
+}sys_menu;
 
 #ifdef	__cplusplus
 extern "C" {

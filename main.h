@@ -83,12 +83,17 @@ typedef enum {
     ML_OFF, ML_TURNING_OFF, ML_ALL_ON, ML_TURNING_ON
 }ml_status;
 
+typedef enum {
+    SYS_ERR, SYS_NORMAL
+}sys_status;
+
 typedef struct {
     menu_display_values *lcd_menu;
     uint16_t light_sensor_timer;
     uint16_t stairs_timer;
     uint8_t light_interval_timer;
     encoder_action enc_action;
+    sys_status sys_status;
     struct {
         uint8_t brightness;
         nl_color color;
