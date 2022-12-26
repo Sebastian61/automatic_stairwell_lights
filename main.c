@@ -179,7 +179,7 @@ void main(void) {
         
         //update LCD
         if(stairs.enc_action != ENC_IDLE) {
-            lcd_handler(&stairs.enc_action);
+            lcd_handler(&stairs.enc_action, &stairs);
         }
         
         //update night light

@@ -88,7 +88,6 @@ typedef enum {
 }sys_status;
 
 typedef struct {
-    menu_display_values *lcd_menu;
     uint16_t light_sensor_timer;
     uint16_t stairs_timer;
     uint8_t light_interval_timer;

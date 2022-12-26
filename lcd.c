@@ -5,6 +5,14 @@
 #include "encoder_hal.h"
 
 static sys_menu menu;
+static const uint8_t *menu_values[MENU_ITEM_NUMBER] = {
+    MENU_NIGHTLIGHT_BRIGHTNESS_STR,
+    MENU_NIGHTLIGHT_COLOR_STR,
+    MENU_DAYLIGHT_SENSITIVITY_STR,
+    MENU_LIGHT_UP_SPEED_STR,
+    MENU_LIGHT_DURATION_STR,
+    MENU_PRELIGHTING_STR
+};
 
 void lcd_init() {
     //setting LCD hardware
@@ -25,6 +33,7 @@ void lcd_init() {
 
 void menu_init(void) {
     menu.screen = MENU_MAIN;
+    menu.menu_string_values = menu_values;
     menu.setting_index = 0;
     return;
 }
@@ -37,11 +46,20 @@ void lcd_setting_menu(void) {
     
 }
 
-static void lcd_update_screen(menu_screen screen) {
+static inline void lcd_update_screen() {
+    switch(menu.screen) {
+        case MENU_MAIN:
+            break;
+        case MENU_SETTINGS:
+            lcd_send_string(menu.menu_string_values[menu.setting_index], sizeof(menu.menu_string_values[menu.setting_index]));
+            break;
+        default:
+            break;
+    }
     return;
 }
 
-void lcd_handler(encoder_action *action){
+void lcd_handler(encoder_action *action, stairwell *stairs){
     switch(*action) {
         case ENC_ACT_LEFT:
             if(menu.screen == MENU_MAIN)
@@ -54,7 +72,6 @@ void lcd_handler(encoder_action *action){
                 else
                     menu.setting_index = MENU_ITEM_NUMBER;
             }
-            lcd_update_screen(menu.screen);
             break;
         case ENC_ACT_RIGHT:
             if(menu.screen == MENU_MAIN)
@@ -63,12 +80,13 @@ void lcd_handler(encoder_action *action){
             if(menu.screen == MENU_SETTINGS) {
                 menu.setting_index += 1;
                 menu.setting_index %= MENU_ITEM_NUMBER;
-                lcd_update_screen(menu.screen);
             }
             break;
         case ENC_ACT_BUTTON:
             break;
     }
+    
+    //update the screen
     *action = ENC_IDLE;
     return;
 }

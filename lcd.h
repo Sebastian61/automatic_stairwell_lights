@@ -9,6 +9,7 @@
 #define	LCD_H
 
 #include "encoder_hal.h"
+#include "main.h"
 
 #ifdef	__cplusplus
 extern "C" {
@@ -16,7 +17,7 @@ extern "C" {
 
 void lcd_init(void);
 void menu_init(void);
-void lcd_handler(encoder_action *action);
+void lcd_handler(encoder_action *action, stairwell *stairs);
 
 #ifdef	__cplusplus
 }
