@@ -11,7 +11,8 @@ static const uint8_t *menu_values[MENU_ITEM_NUMBER] = {
     MENU_DAYLIGHT_SENSITIVITY_STR,
     MENU_LIGHT_UP_SPEED_STR,
     MENU_LIGHT_DURATION_STR,
-    MENU_PRELIGHTING_STR
+    MENU_PRELIGHTING_STR,
+    MENU_RETURN_STR
 };
 
 void lcd_init() {
@@ -46,31 +47,36 @@ void lcd_setting_menu(void) {
     
 }
 
-static inline void lcd_update_screen() {
-    switch(menu.screen) {
-        case MENU_MAIN:
-            break;
-        case MENU_SETTINGS:
-            lcd_send_string(menu.menu_string_values[menu.setting_index], sizeof(menu.menu_string_values[menu.setting_index]));
-            break;
-        default:
-            break;
-    }
-    return;
-}
+//static inline void lcd_update_screen() {
+//    switch(menu.screen) {
+//        case MENU_MAIN:
+//            break;
+//        case MENU_SETTINGS:
+//            lcd_send_string(menu.menu_string_values[menu.setting_index], sizeof(menu.menu_string_values[menu.setting_index]));
+//            break;
+//        default:
+//            break;
+//    }
+//    return;
+//}
 
 void lcd_handler(encoder_action *action, stairwell *stairs){
+    //determine action
     switch(*action) {
         case ENC_ACT_LEFT:
             if(menu.screen == MENU_MAIN)
                 break;
             
             if(menu.screen == MENU_SETTINGS) {
-                if(menu.setting_index) {
-                    menu.setting_index -= 1;
+                
+                if(menu.cursor_index) {
+                    menu.cursor_index -= 1;
                 }
                 else
-                    menu.setting_index = MENU_ITEM_NUMBER;
+                    menu.cursor_index = MENU_ITEM_NUMBER;
+                
+                if(menu.cursor_index != menu.setting_index)
+                    menu.cursor_index == menu.setting_index;
             }
             break;
         case ENC_ACT_RIGHT:
@@ -78,15 +84,55 @@ void lcd_handler(encoder_action *action, stairwell *stairs){
                 break;
             
             if(menu.screen == MENU_SETTINGS) {
-                menu.setting_index += 1;
-                menu.setting_index %= MENU_ITEM_NUMBER;
+                if(menu.cursor_index == menu.setting_index) {
+                    //do nothing
+                }
+                else {
+                    menu.setting_index = (menu.setting_index + 1u) % MENU_ITEM_NUMBER;
+                }
+                menu.cursor_index = (menu.cursor_index + 1u) % MENU_ITEM_NUMBER;
             }
             break;
         case ENC_ACT_BUTTON:
+            switch(menu.screen) {
+                case MENU_MAIN:
+                    menu.screen = MENU_SETTINGS;
+                    menu.cursor_index = 0;
+                    menu.setting_index = 0;
+                    break;
+                case MENU_SETTINGS:
+                    break;
+            }
+            break;
+        default:
+            //erronious call to function
+            return;
+    }
+    *action = ENC_IDLE;
+    
+    //update the screen
+    lcd_clear();
+    switch(menu.screen) {
+        case MENU_MAIN:
+            lcd_send_string((uint8_t *)"STATUS: ", 8);
+            if(stairs->sys_status == SYS_NORMAL)
+                lcd_send_string((uint8_t *)MENU_SYS_NORMAL_STR, sizeof(MENU_SYS_NORMAL_STR));
+            else
+                lcd_send_string((uint8_t *)MENU_SYS_ERROR_STR, sizeof(MENU_SYS_ERROR_STR));
+            
+            lcd_move_cursor(2, 0);
+            lcd_send_string((uint8_t *)"PUSH for SETTING", 16);
+            break;
+        case MENU_SETTINGS:
+            //TODO manage cursor
+            lcd_send_string((uint8_t *)menu.menu_string_values[menu.setting_index], sizeof(menu.menu_string_values[menu.setting_index]));
+            
+            lcd_move_cursor(2, 0);
+            lcd_send_string((uint8_t *)menu.menu_string_values[(menu.setting_index + 1u) % MENU_ITEM_NUMBER], sizeof(menu.menu_string_values[menu.setting_index]));
+            break;
+        default:
             break;
     }
     
-    //update the screen
-    *action = ENC_IDLE;
     return;
 }

@@ -33,7 +33,7 @@
 
 #include <xc.h> // include processor files - each processor file is guarded.  
 
-#define MENU_ITEM_NUMBER                        6
+#define MENU_ITEM_NUMBER                        7u
 
 //MENU STRINGS
 #define MENU_NIGHTLIGHT_BRIGHTNESS_STR          "NLight Brightnes"
@@ -42,6 +42,7 @@
 #define MENU_LIGHT_UP_SPEED_STR                 "Light Up Speed"
 #define MENU_LIGHT_DURATION_STR                 "Light Duration"
 #define MENU_PRELIGHTING_STR                    "Prelighting"
+#define MENU_RETURN_STR                         "RETURN"
 
 //SYSTEM STATUS
 #define MENU_SYS_ERROR_STR                      "ERROR"
@@ -63,6 +64,7 @@ typedef struct{
     menu_screen screen;
     const uint8_t **menu_string_values;
     uint8_t setting_index;
+    uint8_t cursor_index;
 }sys_menu;
 
 #ifdef	__cplusplus
