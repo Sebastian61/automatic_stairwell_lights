@@ -36,21 +36,23 @@
 #define MENU_ITEM_NUMBER                        7u
 
 //MENU STRINGS
-#define MENU_NIGHTLIGHT_BRIGHTNESS_STR          "NLight Brightnes"
-#define MENU_NIGHTLIGHT_COLOR_STR               "NLight Color"
-#define MENU_DAYLIGHT_SENSITIVITY_STR           "NLight Sentivity"
-#define MENU_LIGHT_UP_SPEED_STR                 "Light Up Speed"
-#define MENU_LIGHT_DURATION_STR                 "Light Duration"
-#define MENU_PRELIGHTING_STR                    "Prelighting"
-#define MENU_RETURN_STR                         "RETURN"
+#define MENU_NIGHTLIGHT_BRIGHTNESS_STR          " NLight Intensit"
+#define MENU_NIGHTLIGHT_COLOR_STR               " NLight Color"
+#define MENU_DAYLIGHT_SENSITIVITY_STR           " NLight Sentivity"
+#define MENU_LIGHT_UP_SPEED_STR                 " Light Up Speed"
+#define MENU_LIGHT_DURATION_STR                 " Light Duration"
+#define MENU_PRELIGHTING_STR                    " Prelighting"
+#define MENU_RETURN_STR                         " RETURN"
 
 //SYSTEM STATUS
 #define MENU_SYS_ERROR_STR                      "ERROR"
 #define MENU_SYS_NORMAL_STR                     "NORMAL"
 
+#define LCD_CURSOR_CHAR                         "~" //"->"
+
 typedef enum {
-    MENU_MAIN, MENU_SETTINGS, MENU_SETTINGS_NL_BRIGHTNESS, MENU_SETTINGS_NL_COLOR, MENU_SETTINGS_ML_PRELIGHTING,
-    MENU_SETTINGS_ML_DURATION, MENU_SETTINGS_ML_ONSPEED, MENU_SETTINGS_NL_SENSITIVITY
+    MENU_MAIN, MENU_SETTINGS, MENU_SETTINGS_NL_BRIGHTNESS, MENU_SETTINGS_NL_COLOR, MENU_SETTINGS_NL_SENSITIVITY,
+    MENU_SETTINGS_ML_ONSPEED, MENU_SETTINGS_ML_DURATION, MENU_SETTINGS_ML_PRELIGHTING
 }menu_screen;
 
 //typedef struct{   //TODO not needed
@@ -63,6 +65,7 @@ typedef enum {
 typedef struct{
     menu_screen screen;
     const uint8_t **menu_string_values;
+    const uint8_t *menu_string_len;
     uint8_t setting_index;
     uint8_t cursor_index;
 }sys_menu;

@@ -14,6 +14,15 @@ static const uint8_t *menu_values[MENU_ITEM_NUMBER] = {
     MENU_PRELIGHTING_STR,
     MENU_RETURN_STR
 };
+static const uint8_t menu_str_len[MENU_ITEM_NUMBER] = {
+    sizeof(MENU_NIGHTLIGHT_BRIGHTNESS_STR),
+    sizeof(MENU_NIGHTLIGHT_COLOR_STR),
+    sizeof(MENU_DAYLIGHT_SENSITIVITY_STR),
+    sizeof(MENU_LIGHT_UP_SPEED_STR),
+    sizeof(MENU_LIGHT_DURATION_STR),
+    sizeof(MENU_PRELIGHTING_STR),
+    sizeof(MENU_RETURN_STR)
+};
 
 void lcd_init() {
     //setting LCD hardware
@@ -124,13 +133,33 @@ void lcd_handler(encoder_action *action, stairwell *stairs){
             lcd_send_string((uint8_t *)"PUSH for SETTING", 16);
             break;
         case MENU_SETTINGS:
-            //TODO manage cursor
             lcd_send_string((uint8_t *)menu.menu_string_values[menu.setting_index], sizeof(menu.menu_string_values[menu.setting_index]));
             
             lcd_move_cursor(2, 0);
             lcd_send_string((uint8_t *)menu.menu_string_values[(menu.setting_index + 1u) % MENU_ITEM_NUMBER], sizeof(menu.menu_string_values[menu.setting_index]));
+            
+            //display cursor
+            if(menu.cursor_index == menu.setting_index)
+                lcd_move_cursor(1, 0);
+            lcd_send_string((uint8_t *)LCD_CURSOR_CHAR, 1);
             break;
-        default:
+        case MENU_SETTINGS_NL_BRIGHTNESS:
+            lcd_send_string((uint8_t *)menu.menu_string_values[menu.screen - 2], sizeof(menu.menu_string_values[menu.setting_index]));
+            break;
+        case MENU_SETTINGS_NL_COLOR:
+            
+            break;
+        case MENU_SETTINGS_NL_SENSITIVITY:
+            
+            break;
+        case MENU_SETTINGS_ML_ONSPEED:
+            
+            break;
+        case MENU_SETTINGS_ML_DURATION:
+            
+            break;
+        case MENU_SETTINGS_ML_PRELIGHTING:
+            
             break;
     }
     
