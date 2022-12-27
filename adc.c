@@ -1,7 +1,6 @@
-#include <pic16f690.h>
-
 #include "adc.h"
 #include "stdint.h"
+#include "main.h"
 
 adc_handle adc;
 

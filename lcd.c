@@ -6,13 +6,13 @@
 
 static sys_menu menu;
 static const uint8_t *menu_values[MENU_ITEM_NUMBER] = {
-    MENU_NIGHTLIGHT_BRIGHTNESS_STR,
-    MENU_NIGHTLIGHT_COLOR_STR,
-    MENU_DAYLIGHT_SENSITIVITY_STR,
-    MENU_LIGHT_UP_SPEED_STR,
-    MENU_LIGHT_DURATION_STR,
-    MENU_PRELIGHTING_STR,
-    MENU_RETURN_STR
+    (uint8_t *)MENU_NIGHTLIGHT_BRIGHTNESS_STR,
+    (uint8_t *)MENU_NIGHTLIGHT_COLOR_STR,
+    (uint8_t *)MENU_DAYLIGHT_SENSITIVITY_STR,
+    (uint8_t *)MENU_LIGHT_UP_SPEED_STR,
+    (uint8_t *)MENU_LIGHT_DURATION_STR,
+    (uint8_t *)MENU_PRELIGHTING_STR,
+    (uint8_t *)MENU_RETURN_STR
 };
 static const uint8_t menu_str_len[MENU_ITEM_NUMBER] = {
     sizeof(MENU_NIGHTLIGHT_BRIGHTNESS_STR),
@@ -85,7 +85,7 @@ void lcd_handler(encoder_action *action, stairwell *stairs){
                     menu.cursor_index = MENU_ITEM_NUMBER;
                 
                 if(menu.cursor_index != menu.setting_index)
-                    menu.cursor_index == menu.setting_index;
+                    menu.cursor_index = menu.setting_index;
             }
             break;
         case ENC_ACT_RIGHT:
@@ -110,6 +110,8 @@ void lcd_handler(encoder_action *action, stairwell *stairs){
                     menu.setting_index = 0;
                     break;
                 case MENU_SETTINGS:
+                    break;
+                default:
                     break;
             }
             break;

@@ -43,7 +43,7 @@ void update_stairs(uint32_t light_state);
 
 stairwell stairs;
 
-static void interrupt myisr(void) {
+void __interrupt() myisr(void) {
     //timer interrupt
     if(PIR1bits.TMR1IF) {
         PIR1bits.TMR1IF = 0;
@@ -125,7 +125,7 @@ static void interrupt myisr(void) {
             if(STAIR_DOWN1 == 1) {
                 stairs.main_light.target_state |= 0b11; //turns on bottom three lights
             }else {
-                stairs.main_light.target_state &= ~(0b11);
+                stairs.main_light.target_state &= ~(0b11ul);
             }
             
             stairs.main_light.state = stairs.main_light.target_state;

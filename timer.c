@@ -9,8 +9,8 @@ void timer_init(void) {
     //timer 1
     T1CONbits.T1CKPS = 0b10;    //1:8 prescaler
     //this ensures timer interrupt will trigger every 0.2 seconds
-    TMR1H = ((TIMER_PADDING >> 8) & 0xFF);
-    TMR1L = (uint8_t)(TIMER_PADDING & 0xFF);
+    TMR1H = TIMER_PADDINGH;
+    TMR1L = TIMER_PADDINGL;
     PIE1bits.TMR1IE = 1;//enable timer interrupt
     return;
 }
@@ -21,7 +21,7 @@ void timer1_on_off(uint8_t state) {
 }
 
 void timer1_reset(void) {
-    TMR1H = ((TIMER_PADDING >> 8) & 0xFF);
-    TMR1L = (uint8_t)(TIMER_PADDING & 0xFF);
+    TMR1H = TIMER_PADDINGH;
+    TMR1L = (uint8_t)TIMER_PADDINGL;
     return;
 }
