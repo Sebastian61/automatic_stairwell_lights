@@ -110,6 +110,10 @@ void lcd_handler(encoder_action *action, stairwell *stairs){
                     menu.setting_index = 0;
                     break;
                 case MENU_SETTINGS:
+                    if(menu.cursor_index == (MENU_ITEM_NUMBER - 1))//RETURN
+                        menu.screen = MENU_MAIN;
+                    
+                    menu.screen = menu.cursor_index + 2;
                     break;
                 default:
                     break;
@@ -135,10 +139,10 @@ void lcd_handler(encoder_action *action, stairwell *stairs){
             lcd_send_string((uint8_t *)"PUSH for SETTING", 16);
             break;
         case MENU_SETTINGS:
-            lcd_send_string((uint8_t *)menu.menu_string_values[menu.setting_index], sizeof(menu.menu_string_values[menu.setting_index]));
+            lcd_send_string((uint8_t *)menu.menu_string_values[menu.setting_index], menu.menu_string_len[menu.setting_index]);
             
             lcd_move_cursor(2, 0);
-            lcd_send_string((uint8_t *)menu.menu_string_values[(menu.setting_index + 1u) % MENU_ITEM_NUMBER], sizeof(menu.menu_string_values[menu.setting_index]));
+            lcd_send_string((uint8_t *)menu.menu_string_values[(menu.setting_index + 1u) % MENU_ITEM_NUMBER], menu.menu_string_len[menu.setting_index]);
             
             //display cursor
             if(menu.cursor_index == menu.setting_index)
