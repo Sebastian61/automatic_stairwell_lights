@@ -59,6 +59,7 @@
 #define NL_COLOR_PURPLE_STR                     "PURPLE"
 
 #define LCD_CURSOR_CHAR                         "~" //"->"
+#define LCD_BAR_CHAR                            
 
 typedef enum {
     MENU_MAIN, MENU_SETTINGS, MENU_SETTINGS_NL_BRIGHTNESS, MENU_SETTINGS_NL_COLOR, MENU_SETTINGS_NL_SENSITIVITY,

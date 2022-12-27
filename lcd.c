@@ -96,6 +96,8 @@ void lcd_setting_menu(void) {
 //}
 
 void lcd_handler(encoder_action *action, stairwell *stairs){
+    uint8_t i;
+    uint8_t temp_char;
     //determine action
     switch(*action) {
         case ENC_ACT_LEFT:
@@ -179,7 +181,10 @@ void lcd_handler(encoder_action *action, stairwell *stairs){
             lcd_send_string((uint8_t *)menu.menu_string_values[menu.cursor_index], menu.menu_string_len[menu.cursor_index]);
             
             lcd_move_cursor(2, 0);
-            
+            for(i = 0; i < menu.menu_values.menu_nl_brightness; ++i) {
+                temp_char = 0xff;
+                lcd_send_string(&temp_char, 1);
+            }
             break;
         case MENU_SETTINGS_NL_COLOR:
             lcd_send_string((uint8_t *)menu.menu_string_values[menu.cursor_index], menu.menu_string_len[menu.cursor_index]);
@@ -191,11 +196,19 @@ void lcd_handler(encoder_action *action, stairwell *stairs){
             lcd_send_string((uint8_t *)menu.menu_string_values[menu.cursor_index], menu.menu_string_len[menu.cursor_index]);
             
             lcd_move_cursor(2, 0);
+            for(i = 0; i < menu.menu_values.menu_nl_sensitivity; ++i) {
+                temp_char = 0xff;
+                lcd_send_string(&temp_char, 1);
+            }
             break;
         case MENU_SETTINGS_ML_ONSPEED:
             lcd_send_string((uint8_t *)menu.menu_string_values[menu.cursor_index], menu.menu_string_len[menu.cursor_index]);
             
             lcd_move_cursor(2, 0);
+            for(i = 0; i < menu.menu_values.menu_ml_on_speed; ++i) {
+                temp_char = 0xff;
+                lcd_send_string(&temp_char, 1);
+            }
             break;
         case MENU_SETTINGS_ML_DURATION:
             lcd_send_string((uint8_t *)menu.menu_string_values[menu.cursor_index], menu.menu_string_len[menu.cursor_index]);
