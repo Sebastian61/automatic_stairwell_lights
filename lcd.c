@@ -5,7 +5,7 @@
 #include "encoder_hal.h"
 
 static sys_menu menu;
-static const uint8_t *menu_values[MENU_ITEM_NUMBER] = {
+static const uint8_t *menu_str_values[MENU_ITEM_NUMBER] = {
     (uint8_t *)MENU_NIGHTLIGHT_BRIGHTNESS_STR,
     (uint8_t *)MENU_NIGHTLIGHT_COLOR_STR,
     (uint8_t *)MENU_DAYLIGHT_SENSITIVITY_STR,
@@ -22,6 +22,26 @@ static const uint8_t menu_str_len[MENU_ITEM_NUMBER] = {
     sizeof(MENU_LIGHT_DURATION_STR),
     sizeof(MENU_PRELIGHTING_STR),
     sizeof(MENU_RETURN_STR)
+};
+static const uint8_t *nl_color_values[8] = {
+    (uint8_t *)NL_COLOR_OFF_STR,
+    (uint8_t *)NL_COLOR_RED_STR,
+    (uint8_t *)NL_COLOR_GREEN_STR,
+    (uint8_t *)NL_COLOR_BLUE_STR,
+    (uint8_t *)NL_COLOR_WHITE_STR,
+    (uint8_t *)NL_COLOR_YELLOW_STR,
+    (uint8_t *)NL_COLOR_TEAL_STR,
+    (uint8_t *)NL_COLOR_PURPLE_STR
+};
+static const uint8_t nl_color_len[8] = {
+    sizeof(NL_COLOR_OFF_STR),
+    sizeof(NL_COLOR_RED_STR),
+    sizeof(NL_COLOR_GREEN_STR),
+    sizeof(NL_COLOR_BLUE_STR),
+    sizeof(NL_COLOR_WHITE_STR),
+    sizeof(NL_COLOR_YELLOW_STR),
+    sizeof(NL_COLOR_TEAL_STR),
+    sizeof(NL_COLOR_PURPLE_STR)
 };
 
 void lcd_init() {
@@ -43,7 +63,13 @@ void lcd_init() {
 
 void menu_init(void) {
     menu.screen = MENU_MAIN;
-    menu.menu_string_values = menu_values;
+    menu.menu_values.menu_ml_on_speed = 8;
+    menu.menu_values.menu_nl_brightness = 8;
+    menu.menu_values.menu_nl_sensitivity = 8;
+    menu.menu_string_values = menu_str_values;
+    menu.menu_string_len = menu_str_len;
+    menu.nlight_color_values = nl_color_values;
+    menu.nlight_color_len = nl_color_len;
     menu.setting_index = 0;
     return;
 }
@@ -110,7 +136,7 @@ void lcd_handler(encoder_action *action, stairwell *stairs){
                     menu.setting_index = 0;
                     break;
                 case MENU_SETTINGS:
-                    if(menu.cursor_index == (MENU_ITEM_NUMBER - 1))//RETURN
+                    if(menu.cursor_index == (MENU_ITEM_NUMBER - 1))//RETURN vector
                         menu.screen = MENU_MAIN;
                     
                     menu.screen = menu.cursor_index + 2;
@@ -150,22 +176,36 @@ void lcd_handler(encoder_action *action, stairwell *stairs){
             lcd_send_string((uint8_t *)LCD_CURSOR_CHAR, 1);
             break;
         case MENU_SETTINGS_NL_BRIGHTNESS:
-            lcd_send_string((uint8_t *)menu.menu_string_values[menu.screen - 2], sizeof(menu.menu_string_values[menu.setting_index]));
+            lcd_send_string((uint8_t *)menu.menu_string_values[menu.cursor_index], menu.menu_string_len[menu.cursor_index]);
+            
+            lcd_move_cursor(2, 0);
+            
             break;
         case MENU_SETTINGS_NL_COLOR:
+            lcd_send_string((uint8_t *)menu.menu_string_values[menu.cursor_index], menu.menu_string_len[menu.cursor_index]);
             
+            lcd_move_cursor(2, 0);
+            lcd_send_string((uint8_t *)menu.nlight_color_values[stairs->night_light.color], menu.nlight_color_len[stairs->night_light.color]);
             break;
         case MENU_SETTINGS_NL_SENSITIVITY:
+            lcd_send_string((uint8_t *)menu.menu_string_values[menu.cursor_index], menu.menu_string_len[menu.cursor_index]);
             
+            lcd_move_cursor(2, 0);
             break;
         case MENU_SETTINGS_ML_ONSPEED:
+            lcd_send_string((uint8_t *)menu.menu_string_values[menu.cursor_index], menu.menu_string_len[menu.cursor_index]);
             
+            lcd_move_cursor(2, 0);
             break;
         case MENU_SETTINGS_ML_DURATION:
+            lcd_send_string((uint8_t *)menu.menu_string_values[menu.cursor_index], menu.menu_string_len[menu.cursor_index]);
             
+            lcd_move_cursor(2, 0);
             break;
         case MENU_SETTINGS_ML_PRELIGHTING:
+            lcd_send_string((uint8_t *)menu.menu_string_values[menu.cursor_index], menu.menu_string_len[menu.cursor_index]);
             
+            lcd_move_cursor(2, 0);
             break;
     }
     

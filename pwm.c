@@ -11,13 +11,17 @@ void pwm_init(void) {
     PSTRCONbits.STRB = 0;
     PSTRCONbits.STRC = 0;
     PSTRCONbits.STRD = 0;
-    CCPR1L = 0x80; //Duty Cycle 50% CCP1CONbits.DC1B unused
+    CCPR1L = 0x3F; //setting 8 (in the middle) CCP1CONbits.DC1B unused
     //enable timer 2 configurations
     T2CONbits.TMR2ON = 1; //turns on timer 2
     return;
 }
 
-//turns PWM on on pin RC5/P1A
+void pwm_set_duty(uint8_t duty) {
+    CCPR1L = duty;
+}
+
+//turns PWM on on pin RC5/P1A or P1B
 void pwm_on(uint8_t no) {
     if(no == 1)
         PSTRCONbits.STRA = 1;

@@ -322,10 +322,10 @@ void stairs_init(void) {
     stairs.main_light.state = 0;
     stairs.main_light.target_state = 0;
     
-    stairs.night_light.brightness = 0x80; 
+    stairs.night_light.brightness = 0x3F; 
     stairs.night_light.color = RED;
-    stairs.night_light.sensitivity1 = 0x80;
-    stairs.night_light.sensitivity2 = 0x80;
+    stairs.night_light.sensitivity1 = 0x3F;
+    stairs.night_light.sensitivity2 = 0x3F;
     stairs.night_light.adc_time = 5; //1 second
 }
 

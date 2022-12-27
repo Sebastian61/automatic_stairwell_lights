@@ -48,6 +48,16 @@
 #define MENU_SYS_ERROR_STR                      "ERROR"
 #define MENU_SYS_NORMAL_STR                     "NORMAL"
 
+//NIGHTLIGHT COLORS
+#define NL_COLOR_OFF_STR                        "OFF"
+#define NL_COLOR_RED_STR                        "RED"
+#define NL_COLOR_GREEN_STR                      "GREEN"
+#define NL_COLOR_BLUE_STR                       "BLUE"
+#define NL_COLOR_WHITE_STR                      "WHITE"
+#define NL_COLOR_YELLOW_STR                     "YELLOW"
+#define NL_COLOR_TEAL_STR                       "TEAL"
+#define NL_COLOR_PURPLE_STR                     "PURPLE"
+
 #define LCD_CURSOR_CHAR                         "~" //"->"
 
 typedef enum {
@@ -63,9 +73,18 @@ typedef enum {
 //}menu_display_values;
 
 typedef struct{
+    uint8_t menu_nl_sensitivity;
+    uint8_t menu_nl_brightness;
+    uint8_t menu_ml_on_speed;
+}menu_values;
+
+typedef struct{
+    menu_values menu_values;
     menu_screen screen;
     const uint8_t **menu_string_values;
     const uint8_t *menu_string_len;
+    const uint8_t **nlight_color_values;
+    const uint8_t *nlight_color_len;
     uint8_t setting_index;
     uint8_t cursor_index;
 }sys_menu;
