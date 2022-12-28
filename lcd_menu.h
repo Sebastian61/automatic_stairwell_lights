@@ -74,9 +74,10 @@ typedef enum {
 //}menu_display_values;
 
 typedef struct{
+    uint8_t menu_ml_duration[3];
+    uint8_t menu_ml_on_speed;
     uint8_t menu_nl_sensitivity;
     uint8_t menu_nl_brightness;
-    uint8_t menu_ml_on_speed;
 }menu_values;
 
 typedef struct{

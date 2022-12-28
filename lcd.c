@@ -3,6 +3,7 @@
 #include "main.h"
 #include "74hc595.h"
 #include "encoder_hal.h"
+#include "string.h"
 
 static sys_menu menu;
 static const uint8_t *menu_str_values[MENU_ITEM_NUMBER] = {
@@ -66,6 +67,7 @@ void menu_init(void) {
     menu.menu_values.menu_ml_on_speed = 8;
     menu.menu_values.menu_nl_brightness = 8;
     menu.menu_values.menu_nl_sensitivity = 8;
+    memset(menu.menu_values.menu_ml_duration, 0, 3);
     menu.menu_string_values = menu_str_values;
     menu.menu_string_len = menu_str_len;
     menu.nlight_color_values = nl_color_values;
@@ -74,12 +76,11 @@ void menu_init(void) {
     return;
 }
 
-void lcd_main_menu(void) {
-    
-}
-
-void lcd_setting_menu(void) {
-    
+void lcd_convert_duration(uint16_t duration) {
+    menu.menu_values.menu_ml_duration[0] = ((duration / (5 * 100)) | 0x30);
+    menu.menu_values.menu_ml_duration[1] = (((duration / (5 * 10)) % 10) | 0x30);
+    menu.menu_values.menu_ml_duration[2] = ((duration % 10) | 0x30);
+    return;
 }
 
 //static inline void lcd_update_screen() {
@@ -101,33 +102,99 @@ void lcd_handler(encoder_action *action, stairwell *stairs){
     //determine action
     switch(*action) {
         case ENC_ACT_LEFT:
-            if(menu.screen == MENU_MAIN)
-                break;
-            
-            if(menu.screen == MENU_SETTINGS) {
-                
-                if(menu.cursor_index) {
-                    menu.cursor_index -= 1;
-                }
-                else
-                    menu.cursor_index = MENU_ITEM_NUMBER;
-                
-                if(menu.cursor_index != menu.setting_index)
-                    menu.cursor_index = menu.setting_index;
+            switch(menu.screen) {
+                case MENU_MAIN:
+                    break;
+
+                case MENU_SETTINGS:
+                    if(menu.cursor_index) {
+                        menu.cursor_index -= 1;
+                    }
+                    else
+                        menu.cursor_index = MENU_ITEM_NUMBER;
+
+                    if(menu.cursor_index != menu.setting_index)
+                        menu.cursor_index = menu.setting_index;
+                    break;
+                case MENU_SETTINGS_NL_BRIGHTNESS:
+                    if(menu.menu_values.menu_nl_brightness != 1) {
+                       --menu.menu_values.menu_nl_brightness;
+                       stairs->night_light.brightness = (menu.menu_values.menu_nl_brightness * menu.menu_values.menu_nl_brightness) - 1;
+                    }
+                    break;
+                case MENU_SETTINGS_NL_COLOR:
+                    if(stairs->night_light.color != NL_OFF) 
+                        --stairs->night_light.color;
+                    else
+                        stairs->night_light.color = PURPLE;
+                    break;
+                case MENU_SETTINGS_NL_SENSITIVITY:
+                    if(menu.menu_values.menu_nl_sensitivity != 1) {
+                       --menu.menu_values.menu_nl_sensitivity;
+                       stairs->night_light.sensitivity1 = (menu.menu_values.menu_nl_sensitivity * menu.menu_values.menu_nl_sensitivity) - 1;
+                       stairs->night_light.sensitivity2 = stairs->night_light.sensitivity1;
+                    }
+                    break;
+                case MENU_SETTINGS_ML_ONSPEED:
+                    break;
+                case MENU_SETTINGS_ML_DURATION:
+                    if(stairs->main_light.duration != 150) { //min 30 seconds
+                        stairs->main_light.duration -= 150;
+                    }
+                    break;
+                case MENU_SETTINGS_ML_PRELIGHTING:
+                    if(stairs->main_light.pre_lighting)
+                        stairs->main_light.pre_lighting = 0;
+                    else
+                        stairs->main_light.pre_lighting = 1;
+                    break;
             }
             break;
         case ENC_ACT_RIGHT:
-            if(menu.screen == MENU_MAIN)
-                break;
-            
-            if(menu.screen == MENU_SETTINGS) {
-                if(menu.cursor_index == menu.setting_index) {
-                    //do nothing
-                }
-                else {
-                    menu.setting_index = (menu.setting_index + 1u) % MENU_ITEM_NUMBER;
-                }
-                menu.cursor_index = (menu.cursor_index + 1u) % MENU_ITEM_NUMBER;
+            switch(menu.screen) {
+                case MENU_MAIN:
+                    break;
+                case MENU_SETTINGS:
+                    if(menu.cursor_index == menu.setting_index) {
+                        //do nothing
+                    }
+                    else {
+                        menu.setting_index = (menu.setting_index + 1u) % MENU_ITEM_NUMBER;
+                    }
+                    menu.cursor_index = (menu.cursor_index + 1u) % MENU_ITEM_NUMBER;
+                    break;
+                case MENU_SETTINGS_NL_BRIGHTNESS:
+                    if(menu.menu_values.menu_nl_brightness != 16) {
+                       ++menu.menu_values.menu_nl_brightness;
+                       stairs->night_light.brightness = (menu.menu_values.menu_nl_brightness * menu.menu_values.menu_nl_brightness) - 1;
+                    }
+                    break;
+                case MENU_SETTINGS_NL_COLOR:
+                    if(stairs->night_light.color != PURPLE) 
+                        ++stairs->night_light.color;
+                    else
+                        stairs->night_light.color = NL_OFF;
+                    break;
+                case MENU_SETTINGS_NL_SENSITIVITY:
+                    if(menu.menu_values.menu_nl_sensitivity != 16) {
+                       ++menu.menu_values.menu_nl_sensitivity;
+                       stairs->night_light.sensitivity1 = (menu.menu_values.menu_nl_sensitivity * menu.menu_values.menu_nl_sensitivity) - 1;
+                       stairs->night_light.sensitivity2 = stairs->night_light.sensitivity1;
+                    }
+                    break;
+                case MENU_SETTINGS_ML_ONSPEED:
+                    break;
+                case MENU_SETTINGS_ML_DURATION:
+                    if(stairs->main_light.duration != 1500) { //max 5 minutes
+                        stairs->main_light.duration += 150;
+                    }
+                    break;
+                case MENU_SETTINGS_ML_PRELIGHTING:
+                    if(stairs->main_light.pre_lighting)
+                        stairs->main_light.pre_lighting = 0;
+                    else
+                        stairs->main_light.pre_lighting = 1;
+                    break;
             }
             break;
         case ENC_ACT_BUTTON:
@@ -144,6 +211,8 @@ void lcd_handler(encoder_action *action, stairwell *stairs){
                     menu.screen = menu.cursor_index + 2;
                     break;
                 default:
+                    //must be in one of the sub menus
+                    menu.screen = MENU_SETTINGS;
                     break;
             }
             break;
@@ -214,11 +283,21 @@ void lcd_handler(encoder_action *action, stairwell *stairs){
             lcd_send_string((uint8_t *)menu.menu_string_values[menu.cursor_index], menu.menu_string_len[menu.cursor_index]);
             
             lcd_move_cursor(2, 0);
+            lcd_convert_duration(stairs->main_light.duration);
+            if(menu.menu_values.menu_ml_duration[0] == 0x30)
+                lcd_send_string(&menu.menu_values.menu_ml_duration[1], 2);
+            else
+                lcd_send_string(menu.menu_values.menu_ml_duration, 3);
+            lcd_send_string((uint8_t *)" seconds", 8);
             break;
         case MENU_SETTINGS_ML_PRELIGHTING:
             lcd_send_string((uint8_t *)menu.menu_string_values[menu.cursor_index], menu.menu_string_len[menu.cursor_index]);
             
             lcd_move_cursor(2, 0);
+            if(stairs->main_light.pre_lighting)
+                lcd_send_string((uint8_t *)"ON", 2);
+            else
+                lcd_send_string((uint8_t *)"OFF", 3);
             break;
     }
     
