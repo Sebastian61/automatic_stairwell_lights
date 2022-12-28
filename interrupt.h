@@ -14,9 +14,6 @@
 extern "C" {
 #endif
 
-void interrupt_init(void);
-void handle_interrupt(stairwell *stair);
-
 #ifdef	__cplusplus
 }
 #endif

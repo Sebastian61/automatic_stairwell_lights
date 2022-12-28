@@ -47,6 +47,7 @@ void __interrupt() myisr(void) {
     //timer interrupt
     if(PIR1bits.TMR1IF) {
         PIR1bits.TMR1IF = 0;
+        timer1_reset();
         
         //handle daylight sensor polling
         if(--stairs.light_sensor_timer == 0) {
@@ -164,6 +165,7 @@ void main(void) {
     stairs_init();
     menu_init();
     timer1_on_off(1);
+    enable_global_interrupt(1);
     while(1) {
         //check if LCD needs updating
         //check if values have changed
@@ -202,11 +204,6 @@ void main(void) {
         }
         
         set_nlight_color(stairs.night_light.color);
-        
-//        
-//        __delay_us(100);
-//        __delay_ms(100);
-        //lcd_action();
     }
     return;
 }
@@ -253,27 +250,6 @@ void set_nlight_color(nl_color color) {
     NL_BLUE = 0;
     NL_GREEN = 0;
     NL_RED = 0;
-    
-//    if( color == TEAL |
-//        color == PURPLE |
-//        color == BLUE |
-//        color == WHITE) {
-//        NL_BLUE = 1;
-//    }
-//    
-//    if( color == GREEN |
-//        color == TEAL |
-//        color == YELLOW |
-//        color == WHITE) {
-//    NL_GREEN = 1;
-//    }
-//    
-//    if( color == RED |
-//        color == PURPLE |
-//        color == YELLOW |
-//        color == WHITE) {
-//    NL_RED = 1;
-//    }
     
     switch(color) { //this function is smaller than the other implementation //TODO check back here after optimizations
         case TEAL:
@@ -327,10 +303,6 @@ void stairs_init(void) {
     stairs.night_light.sensitivity1 = 0x3F;
     stairs.night_light.sensitivity2 = 0x3F;
     stairs.night_light.adc_time = 5; //1 second
-}
-
-inline void get_ml_action(uint8_t *action) {
-    return;
 }
 
 void update_stairs(uint32_t stair_state) {

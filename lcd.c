@@ -4,6 +4,7 @@
 #include "74hc595.h"
 #include "encoder_hal.h"
 #include "string.h"
+#include "pwm.h"
 
 static sys_menu menu;
 static const uint8_t *menu_str_values[MENU_ITEM_NUMBER] = {
@@ -123,6 +124,7 @@ void lcd_handler(encoder_action *action, stairwell *stairs){
                     }
                     break;
                 case MENU_SETTINGS_NL_COLOR:
+                    //TODO turn the night light on when on this setting
                     if(stairs->night_light.color != NL_OFF) 
                         --stairs->night_light.color;
                     else
@@ -247,6 +249,7 @@ void lcd_handler(encoder_action *action, stairwell *stairs){
             lcd_send_string((uint8_t *)LCD_CURSOR_CHAR, 1);
             break;
         case MENU_SETTINGS_NL_BRIGHTNESS:
+            pwm_set_duty(stairs->night_light.brightness);
             lcd_send_string((uint8_t *)menu.menu_string_values[menu.cursor_index], menu.menu_string_len[menu.cursor_index]);
             
             lcd_move_cursor(2, 0);
