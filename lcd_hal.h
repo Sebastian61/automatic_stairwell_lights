@@ -64,11 +64,11 @@ extern "C" {
 
 #define LCD_EN     (1 << 1)
 
-#ifndef LCD_EN	//TODO also what is this?
+#ifndef LCD_EN
 extern __bit LCD_EN;
 #endif
 
-enum {		//TODO change to normal defines?
+enum {
     READ = (1 << 3),
     WRITE = (0 << 3)
 };

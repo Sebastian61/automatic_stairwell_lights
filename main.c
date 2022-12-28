@@ -251,7 +251,7 @@ void set_nlight_color(nl_color color) {
     NL_GREEN = 0;
     NL_RED = 0;
     
-    switch(color) { //this function is smaller than the other implementation //TODO check back here after optimizations
+    switch(color) { //this function is smaller than the other implementation
         case TEAL:
             NL_BLUE = 1;
             NL_GREEN = 1;

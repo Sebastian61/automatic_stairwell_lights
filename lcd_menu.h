@@ -66,13 +66,6 @@ typedef enum {
     MENU_SETTINGS_ML_ONSPEED, MENU_SETTINGS_ML_DURATION, MENU_SETTINGS_ML_PRELIGHTING
 }menu_screen;
 
-//typedef struct{   //TODO not needed
-//    uint8_t *nlight_brightness;
-//    uint8_t *nlight_color;
-//    uint8_t *nlight_sensitivity;
-//    uint8_t *ml_prelighting;
-//}menu_display_values;
-
 typedef struct{
     uint8_t menu_ml_duration[3];
     uint8_t menu_ml_on_speed;
