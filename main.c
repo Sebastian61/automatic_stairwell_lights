@@ -28,7 +28,6 @@
 #include "main.h"
 #include "74hc595.h"
 #include "lcd.h"
-#include "interrupt.h"
 #include "encoder_hal.h"
 #include "timer.h"
 #include "adc.h"
@@ -164,8 +163,9 @@ void main(void) {
     
     stairs_init();
     menu_init();
-    timer1_on_off(1);
+    enable_peripheral_interrupt(1);
     enable_global_interrupt(1);
+    timer1_on_off(1);
     while(1) {
         //check if LCD needs updating
         //check if values have changed
@@ -186,21 +186,29 @@ void main(void) {
         
         //update night light
         if(adc_get_value(1) > stairs.night_light.sensitivity1) {
-            stairs.night_light.sensitivity1 -= 10;
-            pwm_on(1);
+            if(stairs.night_light.nl_status1 == NL_OFF) {
+                stairs.night_light.sensitivity1 -= 10;
+                pwm_on(1);
+            }
         }
         else {
-            stairs.night_light.sensitivity1 += 10;
-            pwm_off(1);
+            if(stairs.night_light.nl_status1 == NL_ON) {
+                stairs.night_light.sensitivity1 += 10;
+                pwm_off(1);
+            }
         }
         
         if(adc_get_value(2) > stairs.night_light.sensitivity2) {
-            stairs.night_light.sensitivity2 -= 10;
-            pwm_on(2);
+            if(stairs.night_light.nl_status2 == NL_OFF) {
+                stairs.night_light.sensitivity2 -= 10;
+                pwm_on(2);
+            }
         }
         else {
-            stairs.night_light.sensitivity2 += 10;
-            pwm_off(2);
+            if(stairs.night_light.nl_status2 == NL_ON) {
+                stairs.night_light.sensitivity2 += 10;
+                pwm_off(2);
+            }
         }
         
         set_nlight_color(stairs.night_light.color);
@@ -278,7 +286,7 @@ void set_nlight_color(nl_color color) {
             NL_GREEN = 1;
             NL_RED = 1;
             break;
-        case NL_OFF:
+        case NONE:
             break;
     }
     return;

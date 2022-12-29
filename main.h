@@ -35,6 +35,7 @@
 #include "lcd_menu.h"
 #include "encoder_hal.h"
 
+#define enable_peripheral_interrupt(n)  INTCONbits.PEIE = n;
 #define enable_global_interrupt(n)      INTCONbits.GIE = n;
 
 #define _XTAL_FREQ  8000000
@@ -76,8 +77,12 @@
 #define ML_INIT_TRIG        (1 << 6)    //if 1 light was triggered with a bottom sensor
 
 typedef enum {
-    NL_OFF, RED, GREEN, BLUE, WHITE, YELLOW, TEAL, PURPLE
+    NONE, RED, GREEN, BLUE, WHITE, YELLOW, TEAL, PURPLE
 }nl_color;
+
+typedef enum {
+    NL_OFF, NL_ON
+}nl_status;
 
 typedef enum {
     ML_OFF, ML_TURNING_OFF, ML_ALL_ON, ML_TURNING_ON
@@ -94,6 +99,8 @@ typedef struct {
     encoder_action enc_action;
     sys_status sys_status;
     struct {
+        nl_status nl_status1;
+        nl_status nl_status2;
         uint8_t brightness;
         nl_color color;
         uint8_t sensitivity1;

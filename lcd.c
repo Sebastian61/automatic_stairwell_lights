@@ -125,7 +125,7 @@ void lcd_handler(encoder_action *action, stairwell *stairs){
                     break;
                 case MENU_SETTINGS_NL_COLOR:
                     //TODO turn the night light on when on this setting
-                    if(stairs->night_light.color != NL_OFF) 
+                    if(stairs->night_light.color != NONE) 
                         --stairs->night_light.color;
                     else
                         stairs->night_light.color = PURPLE;
@@ -175,7 +175,7 @@ void lcd_handler(encoder_action *action, stairwell *stairs){
                     if(stairs->night_light.color != PURPLE) 
                         ++stairs->night_light.color;
                     else
-                        stairs->night_light.color = NL_OFF;
+                        stairs->night_light.color = NONE;
                     break;
                 case MENU_SETTINGS_NL_SENSITIVITY:
                     if(menu.menu_values.menu_nl_sensitivity != 16) {
