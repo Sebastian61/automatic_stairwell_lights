@@ -12,11 +12,11 @@
 // CONFIG
 #pragma config FOSC = INTRCIO   // Oscillator Selection bits (INTOSCIO oscillator: I/O function on RA4/OSC2/CLKOUT pin, I/O function on RA5/OSC1/CLKIN)
 #pragma config WDTE = OFF       // Watchdog Timer Enable bit (WDT disabled and can be enabled by SWDTEN bit of the WDTCON register)
-#pragma config PWRTE = ON       // Power-up Timer Enable bit (PWRT enabled)
-#pragma config MCLRE = ON       // MCLR Pin Function Select bit (MCLR pin function is MCLR)
+#pragma config PWRTE = OFF      // Power-up Timer Enable bit (PWRT enabled)
+#pragma config MCLRE = OFF      // MCLR Pin Function Select bit (MCLR pin function is MCLR)
 #pragma config CP = OFF         // Code Protection bit (Program memory code protection is disabled)
 #pragma config CPD = OFF        // Data Code Protection bit (Data memory code protection is disabled)
-#pragma config BOREN = ON       // Brown-out Reset Selection bits (BOR enabled)
+#pragma config BOREN = OFF      // Brown-out Reset Selection bits (BOR enabled)
 #pragma config IESO = OFF       // Internal External Switchover bit (Internal External Switchover mode is disabled)
 #pragma config FCMEN = OFF      // Fail-Safe Clock Monitor Enabled bit (Fail-Safe Clock Monitor is disabled)
 
@@ -217,9 +217,10 @@ void main(void) {
 }
 
 void gpio_init(void) {
-    //adc disabling
+    //adc enabling/disabling
     ANSEL &= ~(_ANSEL_ANS0_MASK | _ANSEL_ANS1_MASK | _ANSEL_ANS2_MASK | _ANSEL_ANS3_MASK | _ANSEL_ANS4_MASK | _ANSEL_ANS5_MASK | _ANSEL_ANS6_MASK | _ANSEL_ANS7_MASK);    //set as digital I/O
     ANSELH &= ~(_ANSELH_ANS10_MASK | _ANSELH_ANS11_MASK);   //set as digital I/O
+    ANSELH |= (_ANSELH_ANS8_MASK | _ANSELH_ANS9_MASK);
     
     //port A outputs
     
@@ -239,6 +240,7 @@ void gpio_init(void) {
     TRISC &= ~(_TRISC_TRISC0_MASK | _TRISC_TRISC1_MASK | _TRISC_TRISC2_MASK | _TRISC_TRISC3_MASK | _TRISC_TRISC4_MASK | _TRISC_TRISC5_MASK);
     
     //port C inputs
+    PORTC &= ~(_PORTC_RC6_MASK | _PORTC_RC7_MASK);
     TRISC |= (_TRISC_TRISC6_MASK | _TRISC_TRISC7_MASK); //inputs for ADC
     
     //interrupts
