@@ -6,16 +6,17 @@
             <file>file:/C:/Users/Sebastian/personalGit/automatic_stairwell_lights/lcd.c</file>
             <file>file:/C:/Users/Sebastian/personalGit/automatic_stairwell_lights/lcd_hal.c</file>
             <file>file:/C:/Users/Sebastian/personalGit/automatic_stairwell_lights/timer.h</file>
-            <file>file:/C:/Users/Sebastian/personalGit/automatic_stairwell_lights/nbproject/Makefile-default.mk</file>
             <file>file:/C:/Users/Sebastian/personalGit/automatic_stairwell_lights/main.h</file>
             <file>file:/C:/Users/Sebastian/personalGit/automatic_stairwell_lights/lcd.h</file>
             <file>file:/C:/Users/Sebastian/personalGit/automatic_stairwell_lights/timer.c</file>
             <file>file:/C:/Users/Sebastian/personalGit/automatic_stairwell_lights/lcd_menu.h</file>
+            <file>file:/C:/Users/Sebastian/personalGit/automatic_stairwell_lights/lcd_hal.h</file>
             <file>file:/C:/Users/Sebastian/personalGit/automatic_stairwell_lights/74hc595.c</file>
+            <file>file:/C:/Users/Sebastian/personalGit/automatic_stairwell_lights/interrupt.h</file>
+            <file>file:/C:/Users/Sebastian/personalGit/automatic_stairwell_lights/interrupt.c</file>
             <file>file:/C:/Users/Sebastian/personalGit/automatic_stairwell_lights/encoder_hal.c</file>
-            <file>file:/C:/Users/Sebastian/personalGit/automatic_stairwell_lights/adc.c</file>
+            <file>file:/C:/Users/Sebastian/personalGit/automatic_stairwell_lights/encoder_hal.h</file>
             <file>file:/C:/Users/Sebastian/personalGit/automatic_stairwell_lights/main.c</file>
-            <file>file:/C:/Users/Sebastian/personalGit/automatic_stairwell_lights/pwm.c</file>
         </group>
     </open-files>
 </project-private>

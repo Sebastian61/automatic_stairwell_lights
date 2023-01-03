@@ -12,7 +12,7 @@
 // CONFIG
 #pragma config FOSC = INTRCIO   // Oscillator Selection bits (INTOSCIO oscillator: I/O function on RA4/OSC2/CLKOUT pin, I/O function on RA5/OSC1/CLKIN)
 #pragma config WDTE = OFF       // Watchdog Timer Enable bit (WDT disabled and can be enabled by SWDTEN bit of the WDTCON register)
-#pragma config PWRTE = OFF      // Power-up Timer Enable bit (PWRT enabled)
+#pragma config PWRTE = ON      // Power-up Timer Enable bit (PWRT enabled)
 #pragma config MCLRE = OFF      // MCLR Pin Function Select bit (MCLR pin function is MCLR)
 #pragma config CP = OFF         // Code Protection bit (Program memory code protection is disabled)
 #pragma config CPD = OFF        // Data Code Protection bit (Data memory code protection is disabled)
@@ -153,8 +153,14 @@ void __interrupt() myisr(void) {
 
 void main(void) {
     //init functions
+    __delay_ms(100);
+    __delay_ms(100);
     osc_init();
+    __delay_ms(100);
     gpio_init();
+    __delay_ms(100);
+    __delay_ms(100);
+    __delay_ms(100);
     lcd_init();
     pwm_init();
     timer_init();

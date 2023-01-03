@@ -49,7 +49,11 @@ static const uint8_t nl_color_len[8] = {
 
 void lcd_init() {
     //setting LCD hardware
+    push_to_lcd(0);
 #if     DATA_LENGTH == DATA_LENGTH_FOUR_BITS
+//    lcd_set_data_eight_bits();
+//    lcd_set_data_eight_bits();
+//    lcd_set_data_eight_bits();
     lcd_set_data_four_bits();
 #elif   DATA_LENGTH == DATA_LENGTH_EIGHT_BITS
     NOP();  //TODO
@@ -60,7 +64,11 @@ void lcd_init() {
     lcd_set_command(ENTRY_MODE_SET);
     lcd_set_command(CLEAR_DISPLAY);
     __delay_ms(2);
-    lcd_send_string((uint8_t *)"Initializing...", 15);
+    while(1){
+    lcd_send_string((uint8_t *)"1234567890", 10);
+    lcd_set_command(CLEAR_DISPLAY);
+    }
+    while(1);
     return;
 }
 

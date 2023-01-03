@@ -1,33 +1,43 @@
+#include "main.h"
 #include "lcd_hal.h"
 #include "74hc595.h"
-#include "main.h"
 
 static LCD_data_t working_data;
 
 static void lcd_send_byte(LCD_data_t *LCD_data) {
     uint8_t output = (LCD_data->data & 0xf0u);
     output |= LCD_data->data_type;
-    push_to_lcd(&output);
+    push_to_lcd(output);
     output |= LCD_EN;
-    push_to_lcd(&output);
+    push_to_lcd(output);
     output &= ~LCD_EN;
-    push_to_lcd(&output); 
+    push_to_lcd(output); 
     output = (uint8_t)(LCD_data->data << 4);
     output |= LCD_data->data_type;
-    push_to_lcd(&output);
+    push_to_lcd(output);
     output |= LCD_EN;
-    push_to_lcd(&output);
+    push_to_lcd(output);
     output &= ~LCD_EN;
-    push_to_lcd(&output); 
+    push_to_lcd(output); 
 }
 
 void lcd_set_data_four_bits(void) {
-    uint8_t output = 0x40;
-    push_to_lcd(&output);
+    uint8_t output = 0x20;
+    push_to_lcd(output);
     output |= LCD_EN;
-    push_to_lcd(&output);
+    push_to_lcd(output);
     output &= ~LCD_EN;
-    push_to_lcd(&output); 
+    push_to_lcd(output); 
+    return;
+}
+
+void lcd_set_data_eight_bits(void) {
+    uint8_t output = 0x30;
+    push_to_lcd(output);
+    output |= LCD_EN;
+    push_to_lcd(output);
+    output &= ~LCD_EN;
+    push_to_lcd(output); 
     return;
 }
 

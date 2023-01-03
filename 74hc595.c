@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include <xc.h>
-#include "74hc595.h"
 #include "main.h"
+#include "74hc595.h"
 
 //this pushes len number of bytes in output to serialized 595s
 static void push_to_serial(uint8_t *output, uint8_t len) {
@@ -23,8 +23,15 @@ void push_to_led(uint32_t led) {
     LEDRCLK = 0;
 }
 
-void push_to_lcd(uint8_t *output) {
-    push_to_serial(output, 1);
+void push_to_lcd(uint8_t output) {
+    uint8_t temp = 0;  //this uses 80 lines
+    for(uint8_t i = 0; i < 8; ++i) {
+        temp <<= 1;
+        temp |= (output & 1u);
+        output >>= 1;
+    }
+    push_to_serial(&temp, 1);
     RCLK = 1;
+    __delay_ms(100);
     RCLK = 0;
 }
