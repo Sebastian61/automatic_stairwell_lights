@@ -30,8 +30,8 @@
 // more than once.  
 #ifndef _LCD_MENU_H_
 #define	_LCD_MENU_H_
-
-#include <xc.h> // include processor files - each processor file is guarded.  
+ 
+#include "main.h"
 
 #define MENU_ITEM_NUMBER                        7u
 
@@ -47,7 +47,7 @@
 #else
 #define MENU_NIGHTLIGHT_BRIGHTNESS_STR          " NLight Intensit"
 #define MENU_NIGHTLIGHT_COLOR_STR               " NLight Color"
-#define MENU_DAYLIGHT_SENSITIVITY_STR           " NLight Sentivity"
+#define MENU_DAYLIGHT_SENSITIVITY_STR           " NLight Sentivty"
 #define MENU_LIGHT_UP_SPEED_STR                 " Light Up Speed"
 #define MENU_LIGHT_DURATION_STR                 " Light Duration"
 #define MENU_PRELIGHTING_STR                    " Prelighting"

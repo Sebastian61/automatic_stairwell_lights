@@ -16,11 +16,22 @@ encoder_action encoder_interrupt(void) {
             encoder.state = P1_STATE;
         if(ENC_LEFT == 1)
             encoder.state = P2_STATE;
-        encoder.state = P0_STATE;
-    }
-    else {
         encoder.state = P1P2_STATE;
     }
+    else {
+        encoder.state = P0_STATE;
+    }
+    
+    //get button state
+    if(ENC_BUTTON == 0) {
+        if(encoder.btn_prev_state == 1) {
+            encoder.btn_prev_state = 0;
+            return ENC_ACT_BUTTON;
+        }
+        encoder.btn_prev_state = 0;
+    }
+    else
+        encoder.btn_prev_state = 1;
     
     //determine if an action is necessary
     if(encoder.state == P1P2_STATE) {

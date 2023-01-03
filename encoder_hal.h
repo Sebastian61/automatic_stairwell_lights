@@ -8,6 +8,8 @@
 #ifndef ENCODER_HAL_H
 #define	ENCODER_HAL_H
 
+#include <stdint.h>
+
 typedef enum {
     P0_STATE, P1_STATE, P2_STATE, P1P2_STATE
 }encoder_state;
@@ -19,6 +21,7 @@ typedef enum {
 typedef struct {
     encoder_state state;
     encoder_state prev_state;
+    uint8_t btn_prev_state;
 }encoder_handle;
 
 void encoder_init(void);

@@ -32,7 +32,7 @@
 #define	MAIN_H
 
 #include <xc.h> // include processor files - each processor file is guarded.  
-#include "lcd_menu.h"
+//#include "lcd_menu.h"
 #include "encoder_hal.h"
 
 //global defines
@@ -42,7 +42,7 @@
 #define _XTAL_FREQ  8000000
 #define DATALEN     DATA_LENGTH_FOUR_BITS
 #define STEP_NUMBER (20 - 1)
-#define USING_2X20_LCD                          1
+#define USING_2X20_LCD
 
 //serial data ports
 #define RCLK        PORTCbits.RC0   //TODO see if Pin configuration will influence programming
