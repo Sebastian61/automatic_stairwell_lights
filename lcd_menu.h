@@ -36,6 +36,15 @@
 #define MENU_ITEM_NUMBER                        7u
 
 //MENU STRINGS
+#ifdef  USING_2X20_LCD
+#define MENU_NIGHTLIGHT_BRIGHTNESS_STR          " NLight Intensity"
+#define MENU_NIGHTLIGHT_COLOR_STR               " NLight Color"
+#define MENU_DAYLIGHT_SENSITIVITY_STR           " NLight Sensitivity"
+#define MENU_LIGHT_UP_SPEED_STR                 " Light Up Speed"
+#define MENU_LIGHT_DURATION_STR                 " Light Duration"
+#define MENU_PRELIGHTING_STR                    " Prelighting"
+#define MENU_RETURN_STR                         " RETURN"
+#else
 #define MENU_NIGHTLIGHT_BRIGHTNESS_STR          " NLight Intensit"
 #define MENU_NIGHTLIGHT_COLOR_STR               " NLight Color"
 #define MENU_DAYLIGHT_SENSITIVITY_STR           " NLight Sentivity"
@@ -43,6 +52,7 @@
 #define MENU_LIGHT_DURATION_STR                 " Light Duration"
 #define MENU_PRELIGHTING_STR                    " Prelighting"
 #define MENU_RETURN_STR                         " RETURN"
+#endif
 
 //SYSTEM STATUS
 #define MENU_SYS_ERROR_STR                      "ERROR"

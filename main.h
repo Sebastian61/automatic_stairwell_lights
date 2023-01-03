@@ -35,12 +35,14 @@
 #include "lcd_menu.h"
 #include "encoder_hal.h"
 
+//global defines
 #define enable_peripheral_interrupt(n)  INTCONbits.PEIE = n;
 #define enable_global_interrupt(n)      INTCONbits.GIE = n;
 
 #define _XTAL_FREQ  8000000
 #define DATALEN     DATA_LENGTH_FOUR_BITS
 #define STEP_NUMBER (20 - 1)
+#define USING_2X20_LCD                          1
 
 //serial data ports
 #define RCLK        PORTCbits.RC0   //TODO see if Pin configuration will influence programming

@@ -60,22 +60,22 @@ extern "C" {
     
 #define ON  1
 #define OFF 0
-#define LCD_LED(n)  (n << 1)
+#define LCD_LED(n)  (n << 0)
 
-#define LCD_EN     (1 << 1)
+#define LCD_EN     (1 << 0)
 
 #ifndef LCD_EN
 extern __bit LCD_EN;
 #endif
 
 enum {
-    READ = (1 << 3),
-    WRITE = (0 << 3)
+    READ = (1 << 2),
+    WRITE = (0 << 2)
 };
 
 enum {
-    DATA = (1 << 2),
-    COMMAND = (0 << 2)
+    DATA = (1 << 1),
+    COMMAND = (0 << 1)
 };
 
 typedef struct {
