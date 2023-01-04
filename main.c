@@ -153,14 +153,8 @@ void __interrupt() myisr(void) {
 
 void main(void) {
     //init functions
-    __delay_ms(100);
-    __delay_ms(100);
     osc_init();
-    __delay_ms(100);
     gpio_init();
-    __delay_ms(100);
-    __delay_ms(100);
-    __delay_ms(100);
     lcd_init();
     pwm_init();
     timer_init();
@@ -169,6 +163,8 @@ void main(void) {
     
     stairs_init();
     menu_init();
+    //delay so the user can actually see the text on the lcd screen
+    __delay_ms(3000);
     enable_peripheral_interrupt(1);
     enable_global_interrupt(1);
     timer1_on_off(1);
@@ -222,7 +218,7 @@ void main(void) {
     return;
 }
 
-void gpio_init(void) {
+void gpio_init(void) { //TODO disable the pull up resistor
     //adc enabling/disabling
     ANSEL &= ~(_ANSEL_ANS0_MASK | _ANSEL_ANS1_MASK | _ANSEL_ANS2_MASK | _ANSEL_ANS3_MASK | _ANSEL_ANS4_MASK | _ANSEL_ANS5_MASK | _ANSEL_ANS6_MASK | _ANSEL_ANS7_MASK);    //set as digital I/O
     ANSELH &= ~(_ANSELH_ANS10_MASK | _ANSELH_ANS11_MASK);   //set as digital I/O

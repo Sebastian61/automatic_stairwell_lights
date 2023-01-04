@@ -18,7 +18,7 @@ static void push_to_serial(uint8_t *output, uint8_t len) {
 }
 
 void push_to_led(uint32_t led) {
-    push_to_serial((uint8_t *)&led, 5);
+    push_to_serial((uint8_t *)&led, 4);
     LEDRCLK = 1;
     LEDRCLK = 0;
 }
@@ -32,6 +32,6 @@ void push_to_lcd(uint8_t output) {
     }
     push_to_serial(&temp, 1);
     RCLK = 1;
-    __delay_ms(100);
+    __delay_us(10);
     RCLK = 0;
 }
