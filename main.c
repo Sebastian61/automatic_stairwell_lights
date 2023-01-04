@@ -189,12 +189,14 @@ void main(void) {
         //update night light
         if(adc_get_value(1) > stairs.night_light.sensitivity1) {
             if(stairs.night_light.nl_status1 == NL_OFF) {
+                stairs.night_light.nl_status1 = NL_ON;
                 stairs.night_light.sensitivity1 -= 10;
                 pwm_on(1);
             }
         }
         else {
             if(stairs.night_light.nl_status1 == NL_ON) {
+                stairs.night_light.nl_status1 = NL_OFF;
                 stairs.night_light.sensitivity1 += 10;
                 pwm_off(1);
             }
@@ -202,12 +204,14 @@ void main(void) {
         
         if(adc_get_value(2) > stairs.night_light.sensitivity2) {
             if(stairs.night_light.nl_status2 == NL_OFF) {
+                stairs.night_light.nl_status2 = NL_ON;
                 stairs.night_light.sensitivity2 -= 10;
                 pwm_on(2);
             }
         }
         else {
             if(stairs.night_light.nl_status2 == NL_ON) {
+                stairs.night_light.nl_status2 = NL_OFF;
                 stairs.night_light.sensitivity2 += 10;
                 pwm_off(2);
             }
@@ -316,6 +320,8 @@ void stairs_init(void) {
     stairs.night_light.sensitivity1 = 0x3F;
     stairs.night_light.sensitivity2 = 0x3F;
     stairs.night_light.adc_time = 5; //1 second
+    stairs.night_light.nl_status1 = NL_OFF;
+    stairs.night_light.nl_status2 = NL_OFF;
 }
 
 void update_stairs(uint32_t stair_state) {
