@@ -228,6 +228,7 @@ void gpio_init(void) { //TODO disable the pull up resistor
     
     //port A inputs
     //no modifications to TRISA needed due to input being the default value
+    WPUA &= ~(_WPUA_WPUA2_MASK);    //disable weak pull up resistor for the encoder button
     
     //port B
     //port B output
