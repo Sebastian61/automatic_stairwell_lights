@@ -31,15 +31,15 @@ void lcd_set_data_four_bits(void) {
     return;
 }
 
-void lcd_set_data_eight_bits(void) {
-    uint8_t output = 0x30;
-    push_to_lcd(output);
-    output |= LCD_EN;
-    push_to_lcd(output);
-    output &= ~LCD_EN;
-    push_to_lcd(output); 
-    return;
-}
+//void lcd_set_data_eight_bits(void) {
+//    uint8_t output = 0x30;
+//    push_to_lcd(output);
+//    output |= LCD_EN;
+//    push_to_lcd(output);
+//    output &= ~LCD_EN;
+//    push_to_lcd(output); 
+//    return;
+//}
 
 void lcd_send_string(uint8_t *str_data, uint8_t str_length) {
     for(uint8_t i = 1; i < str_length; ++i) {
