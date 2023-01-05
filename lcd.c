@@ -79,6 +79,7 @@ void menu_init(void) {
     menu.nlight_color_values = nl_color_values;
     menu.nlight_color_len = nl_color_len;
     menu.setting_index = 0;
+    menu.current_screen = 0;
     return;
 }
 
@@ -134,14 +135,16 @@ void lcd_handler(encoder_action *action, stairwell *stairs){
 //    //end test function
     uint8_t i;
     uint8_t temp_char = 0b11111111;
+    uint8_t empty_char = 0b00010000;
     //determine action
     switch(*action) {
         case ENC_ACT_LEFT:
+            menu.current_screen = 1;
             switch(menu.screen) {
                 case MENU_MAIN:
                     break;
-
                 case MENU_SETTINGS:
+                    menu.current_screen = 0;
                     if(menu.cursor_index) {
                         menu.cursor_index -= 1;
                     }
@@ -191,10 +194,12 @@ void lcd_handler(encoder_action *action, stairwell *stairs){
             }
             break;
         case ENC_ACT_RIGHT:
+            menu.current_screen = 1;
             switch(menu.screen) {
                 case MENU_MAIN:
                     break;
                 case MENU_SETTINGS:
+                    menu.current_screen = 0;
                     if(menu.cursor_index == menu.setting_index) {
                         //do nothing
                     }
@@ -238,6 +243,7 @@ void lcd_handler(encoder_action *action, stairwell *stairs){
             }
             break;
         case ENC_ACT_BUTTON:
+            menu.current_screen = 0;
             switch(menu.screen) {
                 case MENU_MAIN:
                     menu.screen = MENU_SETTINGS;
@@ -252,21 +258,26 @@ void lcd_handler(encoder_action *action, stairwell *stairs){
                     break;
                 default:
                     //must be in one of the sub menus
+                    //restore sensitivity
+                    stairs->night_light.sensitivity1 = (menu.menu_values.menu_nl_sensitivity * menu.menu_values.menu_nl_sensitivity) - 1;
+                    stairs->night_light.sensitivity2 = stairs->night_light.sensitivity1;
                     menu.screen = MENU_SETTINGS;
                     break;
             }
             break;
         default:
-            //erronious call to function
-            INTCONbits.RABIE = 1; //reenable IO interrupts
-            return;
+            break;
     }
     *action = ENC_IDLE;
     
     //update the screen
-    lcd_clear();
+    if(!menu.current_screen)
+        lcd_clear();
+    
     switch(menu.screen) {
         case MENU_MAIN:
+            if(menu.current_screen)
+                break;
             lcd_send_string((uint8_t *)"STATUS: ", 8);
             if(stairs->sys_status == SYS_NORMAL)
                 lcd_send_string((uint8_t *)MENU_SYS_NORMAL_STR, sizeof(MENU_SYS_NORMAL_STR));
@@ -290,30 +301,50 @@ void lcd_handler(encoder_action *action, stairwell *stairs){
             lcd_send_string((uint8_t *)LCD_CURSOR_CHAR, 2);
             break;
         case MENU_SETTINGS_NL_BRIGHTNESS:
+            //turns the night light on
+            stairs->night_light.sensitivity1 = 0;
+            stairs->night_light.sensitivity2 = 0;
             pwm_set_duty(stairs->night_light.brightness);
-            lcd_send_string((uint8_t *)menu.menu_string_values[menu.cursor_index], menu.menu_string_len[menu.cursor_index]);
+            if(!menu.current_screen)
+                lcd_send_string((uint8_t *)menu.menu_string_values[menu.cursor_index], menu.menu_string_len[menu.cursor_index]);
             
             lcd_move_cursor(2, 0);
-            for(i = 0; i < menu.menu_values.menu_nl_brightness; ++i) {
-                lcd_send_string(&temp_char, 2);
+            for(i = 0; i < 16; ++i) {
+                if(i < menu.menu_values.menu_nl_brightness)
+                    lcd_send_string(&temp_char, 2);
+                else
+                    lcd_send_string(&empty_char, 2);
             }
             break;
         case MENU_SETTINGS_NL_COLOR:
-            lcd_send_string((uint8_t *)menu.menu_string_values[menu.cursor_index], menu.menu_string_len[menu.cursor_index]);
+            //turns the night light on
+            stairs->night_light.sensitivity1 = 0;
+            stairs->night_light.sensitivity2 = 0;
+            if(!menu.current_screen)
+                lcd_send_string((uint8_t *)menu.menu_string_values[menu.cursor_index], menu.menu_string_len[menu.cursor_index]);
             
             lcd_move_cursor(2, 0);
             lcd_send_string((uint8_t *)menu.nlight_color_values[stairs->night_light.color], menu.nlight_color_len[stairs->night_light.color]);
+            lcd_send_string((uint8_t *)"    ", 5);
             break;
         case MENU_SETTINGS_NL_SENSITIVITY:
-            lcd_send_string((uint8_t *)menu.menu_string_values[menu.cursor_index], menu.menu_string_len[menu.cursor_index]);
+            //turns the night light on
+            stairs->night_light.sensitivity1 = 0;
+            stairs->night_light.sensitivity2 = 0;
+            if(!menu.current_screen)
+                lcd_send_string((uint8_t *)menu.menu_string_values[menu.cursor_index], menu.menu_string_len[menu.cursor_index]);
             
             lcd_move_cursor(2, 0);
-            for(i = 0; i < menu.menu_values.menu_nl_sensitivity; ++i) {
-                lcd_send_string(&temp_char, 2);
+            for(i = 0; i < 16; ++i) {
+                if(i < menu.menu_values.menu_nl_sensitivity)
+                    lcd_send_string(&temp_char, 2);
+                else
+                    lcd_send_string(&empty_char, 2);
             }
             break;
         case MENU_SETTINGS_ML_ONSPEED:
-            lcd_send_string((uint8_t *)menu.menu_string_values[menu.cursor_index], menu.menu_string_len[menu.cursor_index]);
+            if(!menu.current_screen)
+                lcd_send_string((uint8_t *)menu.menu_string_values[menu.cursor_index], menu.menu_string_len[menu.cursor_index]);
             
             lcd_move_cursor(2, 0);
             for(i = 0; i < menu.menu_values.menu_ml_on_speed; ++i) {
@@ -321,7 +352,8 @@ void lcd_handler(encoder_action *action, stairwell *stairs){
             }
             break;
         case MENU_SETTINGS_ML_DURATION:
-            lcd_send_string((uint8_t *)menu.menu_string_values[menu.cursor_index], menu.menu_string_len[menu.cursor_index]);
+            if(!menu.current_screen)
+                lcd_send_string((uint8_t *)menu.menu_string_values[menu.cursor_index], menu.menu_string_len[menu.cursor_index]);
             
             lcd_move_cursor(2, 0);
             lcd_convert_duration(stairs->main_light.duration);
@@ -332,11 +364,12 @@ void lcd_handler(encoder_action *action, stairwell *stairs){
             lcd_send_string((uint8_t *)" seconds", 9);
             break;
         case MENU_SETTINGS_ML_PRELIGHTING:
-            lcd_send_string((uint8_t *)menu.menu_string_values[menu.cursor_index], menu.menu_string_len[menu.cursor_index]);
+            if(!menu.current_screen)
+                lcd_send_string((uint8_t *)menu.menu_string_values[menu.cursor_index], menu.menu_string_len[menu.cursor_index]);
             
             lcd_move_cursor(2, 0);
             if(stairs->main_light.pre_lighting)
-                lcd_send_string((uint8_t *)"ON", 3);
+                lcd_send_string((uint8_t *)"ON ", 4);
             else
                 lcd_send_string((uint8_t *)"OFF", 4);
             break;

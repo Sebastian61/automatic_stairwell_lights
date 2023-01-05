@@ -173,6 +173,8 @@ void main(void) {
     lcd_send_string((uint8_t *)"DONE!", 6);
     __delay_ms(1000);
     lcd_clear();
+    lcd_handler(&stairs.enc_action, &stairs);
+            
     while(1) {
         //check if LCD needs updating
         //check if values have changed
@@ -192,32 +194,32 @@ void main(void) {
         }
         
         //update night light
-        if(adc_get_value(1) > stairs.night_light.sensitivity1) {
+        if(adc_get_value(1) >= stairs.night_light.sensitivity1) {
             if(stairs.night_light.nl_status1 == NL_OFF) {
                 stairs.night_light.nl_status1 = NL_ON;
-                stairs.night_light.sensitivity1 -= 10;
+//                stairs.night_light.sensitivity1 -= 10;
                 pwm_on(1);
             }
         }
         else {
             if(stairs.night_light.nl_status1 == NL_ON) {
                 stairs.night_light.nl_status1 = NL_OFF;
-                stairs.night_light.sensitivity1 += 10;
+//                stairs.night_light.sensitivity1 += 10;
                 pwm_off(1);
             }
         }
         
-        if(adc_get_value(2) > stairs.night_light.sensitivity2) {
+        if(adc_get_value(2) >= stairs.night_light.sensitivity2) {
             if(stairs.night_light.nl_status2 == NL_OFF) {
                 stairs.night_light.nl_status2 = NL_ON;
-                stairs.night_light.sensitivity2 -= 10;
+//                stairs.night_light.sensitivity2 -= 10;
                 pwm_on(2);
             }
         }
         else {
             if(stairs.night_light.nl_status2 == NL_ON) {
                 stairs.night_light.nl_status2 = NL_OFF;
-                stairs.night_light.sensitivity2 += 10;
+//                stairs.night_light.sensitivity2 += 10;
                 pwm_off(2);
             }
         }

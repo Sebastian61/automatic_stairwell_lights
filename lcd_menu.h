@@ -92,6 +92,7 @@ typedef struct{
     const uint8_t *nlight_color_len;
     uint8_t setting_index;
     uint8_t cursor_index;
+    uint8_t current_screen;
 }sys_menu;
 
 #ifdef	__cplusplus
