@@ -32,6 +32,7 @@
 #include "timer.h"
 #include "adc.h"
 #include "pwm.h"
+#include "lcd_hal.h"
 
 void gpio_init(void);
 void osc_init(void);
@@ -107,9 +108,10 @@ void __interrupt() myisr(void) {
     //IO interrupt
     if(INTCONbits.RABIF) {
         INTCONbits.RABIF = 0;
-        
         //handle encoder
         stairs.enc_action = encoder_interrupt();
+        if(stairs.enc_action != ENC_IDLE)
+            INTCONbits.RABIE = 0;   //disable interrupts for IO interrupts
         
         //handle stair sensors outer level
         if((stairs.main_light.pre_lighting == 1) && (stairs.main_light.ml_status == ML_OFF)) {
@@ -164,10 +166,13 @@ void main(void) {
     stairs_init();
     menu_init();
     //delay so the user can actually see the text on the lcd screen
-    __delay_ms(3000);
+    __delay_ms(1000);
     enable_peripheral_interrupt(1);
     enable_global_interrupt(1);
     timer1_on_off(1);
+    lcd_send_string((uint8_t *)"DONE!", 6);
+    __delay_ms(1000);
+    lcd_clear();
     while(1) {
         //check if LCD needs updating
         //check if values have changed

@@ -12,11 +12,11 @@ encoder_action encoder_interrupt(void) {
     
     //get the current state
     if((ENC_LEFT == 0) | (ENC_RIGHT == 0)) {
+        encoder.state = P1P2_STATE;
         if(ENC_RIGHT == 1)
             encoder.state = P1_STATE;
         if(ENC_LEFT == 1)
             encoder.state = P2_STATE;
-        encoder.state = P1P2_STATE;
     }
     else {
         encoder.state = P0_STATE;
@@ -36,9 +36,9 @@ encoder_action encoder_interrupt(void) {
     //determine if an action is necessary
     if(encoder.state == P1P2_STATE) {
         if(encoder.prev_state == P1_STATE)
-            return ENC_ACT_LEFT;
-        if(encoder.prev_state == P2_STATE)
             return ENC_ACT_RIGHT;
+        if(encoder.prev_state == P2_STATE)
+            return ENC_ACT_LEFT;
     }
     
     return ENC_IDLE;

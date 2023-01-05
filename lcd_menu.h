@@ -68,7 +68,7 @@
 #define NL_COLOR_TEAL_STR                       "TEAL"
 #define NL_COLOR_PURPLE_STR                     "PURPLE"
 
-#define LCD_CURSOR_CHAR                         "~" //"->"
+#define LCD_CURSOR_CHAR                         "~"
 #define LCD_BAR_CHAR                            
 
 typedef enum {

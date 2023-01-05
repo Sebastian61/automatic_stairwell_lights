@@ -59,8 +59,8 @@ extern "C" {
 #define CURSOR_SHIFT_DIRECTION  CURSOR_SHIFT_RIGHT
 #define SHIFT_DISPLAY           SHIFT_DISPLAY_DISABLE
 #define DISPLAY_ON_OFF          DISPLAY_ON
-#define CURSOR_DISPLAY_ON_OFF   CURSOR_DISPLAY_ON
-#define CURSOR_BLINK_ON_OFF     CURSOR_BLINK_ON
+#define CURSOR_DISPLAY_ON_OFF   CURSOR_DISPLAY_OFF
+#define CURSOR_BLINK_ON_OFF     CURSOR_BLINK_OFF
 #define CURSOR_DISPLAY          CURSOR_SHIFT
 #define SHIFT_DIRECTION         SHIFT_RIGHT
 #define DATA_LENGTH             DATA_LENGTH_FOUR_BITS
@@ -74,17 +74,17 @@ extern "C" {
     
 #define ON  1
 #define OFF 0
-#define LCD_LED(n)  (n << 1)
+#define LCD_LED(n)  (n << 0)
 
-#define LCD_EN     (1 << 1)
+#define LCD_EN     (1 << 0)
 
 #ifndef LCD_EN
 extern __bit LCD_EN;
 #endif
 
 enum {
-    READ = (1 << 3),
-    WRITE = (0 << 3)
+    READ = (1 << 1),
+    WRITE = (0 << 1)
 };
 
 enum {

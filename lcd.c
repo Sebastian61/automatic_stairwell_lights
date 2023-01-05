@@ -64,7 +64,7 @@ void lcd_init() {
     lcd_set_command(ENTRY_MODE_SET);
     lcd_set_command(CLEAR_DISPLAY);
     __delay_ms(2);
-    lcd_send_string((uint8_t *)"Initializing...", 15);
+    lcd_send_string((uint8_t *)"Initializing...", 16);
     return;
 }
 
@@ -103,8 +103,37 @@ void lcd_convert_duration(uint16_t duration) {
 //}
 
 void lcd_handler(encoder_action *action, stairwell *stairs){
+//    //testing function
+//    static uint8_t test;
+//    static encoder_action last_action;
+//    
+//    if(last_action == *action)
+//        ++test;
+//    else
+//        test = 0x30;
+//    
+//    lcd_clear();
+//        
+//    switch(*action) {
+//        case ENC_ACT_LEFT:
+//            lcd_send_string((uint8_t *)"LEFT: ", 7);
+//            break;
+//        case ENC_ACT_RIGHT:
+//            lcd_send_string((uint8_t *)"RIGHT: ", 8);
+//            break;
+//        case ENC_ACT_BUTTON:
+//            lcd_send_string((uint8_t *)"BUTTON: ", 9);
+//            break;
+//        default:
+//            lcd_send_string((uint8_t *)"ERROR", 6);
+//            break;
+//    }
+//    lcd_send_string((uint8_t *)test, 2);
+//    INTCONbits.RABIE = 1; //reenable IO interrupts
+//    return;
+//    //end test function
     uint8_t i;
-    uint8_t temp_char;
+    uint8_t temp_char = 0b11111111;
     //determine action
     switch(*action) {
         case ENC_ACT_LEFT:
@@ -117,10 +146,14 @@ void lcd_handler(encoder_action *action, stairwell *stairs){
                         menu.cursor_index -= 1;
                     }
                     else
-                        menu.cursor_index = MENU_ITEM_NUMBER;
+                        menu.cursor_index = MENU_ITEM_NUMBER - 1;
 
-                    if(menu.cursor_index != menu.setting_index)
-                        menu.cursor_index = menu.setting_index;
+                    if(menu.cursor_index != menu.setting_index) {
+                        if(menu.setting_index)
+                            menu.setting_index -= 1;
+                        else
+                            menu.setting_index = MENU_ITEM_NUMBER - 1;
+                    }
                     break;
                 case MENU_SETTINGS_NL_BRIGHTNESS:
                     if(menu.menu_values.menu_nl_brightness != 1) {
@@ -214,8 +247,8 @@ void lcd_handler(encoder_action *action, stairwell *stairs){
                 case MENU_SETTINGS:
                     if(menu.cursor_index == (MENU_ITEM_NUMBER - 1))//RETURN vector
                         menu.screen = MENU_MAIN;
-                    
-                    menu.screen = menu.cursor_index + 2;
+                    else
+                        menu.screen = menu.cursor_index + 2;
                     break;
                 default:
                     //must be in one of the sub menus
@@ -225,6 +258,7 @@ void lcd_handler(encoder_action *action, stairwell *stairs){
             break;
         default:
             //erronious call to function
+            INTCONbits.RABIE = 1; //reenable IO interrupts
             return;
     }
     *action = ENC_IDLE;
@@ -246,12 +280,14 @@ void lcd_handler(encoder_action *action, stairwell *stairs){
             lcd_send_string((uint8_t *)menu.menu_string_values[menu.setting_index], menu.menu_string_len[menu.setting_index]);
             
             lcd_move_cursor(2, 0);
-            lcd_send_string((uint8_t *)menu.menu_string_values[(menu.setting_index + 1u) % MENU_ITEM_NUMBER], menu.menu_string_len[menu.setting_index]);
+            lcd_send_string((uint8_t *)menu.menu_string_values[(menu.setting_index + 1u) % MENU_ITEM_NUMBER], menu.menu_string_len[(menu.setting_index + 1u) % MENU_ITEM_NUMBER]);
             
             //display cursor
             if(menu.cursor_index == menu.setting_index)
                 lcd_move_cursor(1, 0);
-            lcd_send_string((uint8_t *)LCD_CURSOR_CHAR, 1);
+            else
+                lcd_move_cursor(2, 0);
+            lcd_send_string((uint8_t *)LCD_CURSOR_CHAR, 2);
             break;
         case MENU_SETTINGS_NL_BRIGHTNESS:
             pwm_set_duty(stairs->night_light.brightness);
@@ -259,8 +295,7 @@ void lcd_handler(encoder_action *action, stairwell *stairs){
             
             lcd_move_cursor(2, 0);
             for(i = 0; i < menu.menu_values.menu_nl_brightness; ++i) {
-                temp_char = 0xff;
-                lcd_send_string(&temp_char, 1);
+                lcd_send_string(&temp_char, 2);
             }
             break;
         case MENU_SETTINGS_NL_COLOR:
@@ -274,8 +309,7 @@ void lcd_handler(encoder_action *action, stairwell *stairs){
             
             lcd_move_cursor(2, 0);
             for(i = 0; i < menu.menu_values.menu_nl_sensitivity; ++i) {
-                temp_char = 0xff;
-                lcd_send_string(&temp_char, 1);
+                lcd_send_string(&temp_char, 2);
             }
             break;
         case MENU_SETTINGS_ML_ONSPEED:
@@ -283,8 +317,7 @@ void lcd_handler(encoder_action *action, stairwell *stairs){
             
             lcd_move_cursor(2, 0);
             for(i = 0; i < menu.menu_values.menu_ml_on_speed; ++i) {
-                temp_char = 0xff;
-                lcd_send_string(&temp_char, 1);
+                lcd_send_string(&temp_char, 2);
             }
             break;
         case MENU_SETTINGS_ML_DURATION:
@@ -293,21 +326,22 @@ void lcd_handler(encoder_action *action, stairwell *stairs){
             lcd_move_cursor(2, 0);
             lcd_convert_duration(stairs->main_light.duration);
             if(menu.menu_values.menu_ml_duration[0] == 0x30)
-                lcd_send_string(&menu.menu_values.menu_ml_duration[1], 2);
+                lcd_send_string(&menu.menu_values.menu_ml_duration[1], 3);
             else
-                lcd_send_string(menu.menu_values.menu_ml_duration, 3);
-            lcd_send_string((uint8_t *)" seconds", 8);
+                lcd_send_string(menu.menu_values.menu_ml_duration, 4);
+            lcd_send_string((uint8_t *)" seconds", 9);
             break;
         case MENU_SETTINGS_ML_PRELIGHTING:
             lcd_send_string((uint8_t *)menu.menu_string_values[menu.cursor_index], menu.menu_string_len[menu.cursor_index]);
             
             lcd_move_cursor(2, 0);
             if(stairs->main_light.pre_lighting)
-                lcd_send_string((uint8_t *)"ON", 2);
+                lcd_send_string((uint8_t *)"ON", 3);
             else
-                lcd_send_string((uint8_t *)"OFF", 3);
+                lcd_send_string((uint8_t *)"OFF", 4);
             break;
     }
-    
+
+    INTCONbits.RABIE = 1; //reenable IO interrupts
     return;
 }
