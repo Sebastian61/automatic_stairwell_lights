@@ -250,8 +250,8 @@ void gpio_init(void) { //TODO disable the pull up resistor
     //port C output
     //RC0-RC3 configured as outputs for serial ICs
     //RC4, RC5 as output for PWM
-    PORTC &= ~(_PORTC_RC0_MASK | _PORTC_RC1_MASK | _PORTC_RC2_MASK | _PORTC_RC3_MASK | _PORTC_RC4_MASK | _PORTC_RC5_MASK);
-    TRISC &= ~(_TRISC_TRISC0_MASK | _TRISC_TRISC1_MASK | _TRISC_TRISC2_MASK | _TRISC_TRISC3_MASK | _TRISC_TRISC4_MASK | _TRISC_TRISC5_MASK);
+    PORTC &= ~(_PORTC_RC0_MASK | _PORTC_RC1_MASK | _PORTC_RC2_MASK | _PORTC_RC3_MASK/* | _PORTC_RC4_MASK | _PORTC_RC5_MASK*/);
+    TRISC &= ~(_TRISC_TRISC0_MASK | _TRISC_TRISC1_MASK | _TRISC_TRISC2_MASK | _TRISC_TRISC3_MASK/* | _TRISC_TRISC4_MASK | _TRISC_TRISC5_MASK*/);
     
     //port C inputs
     PORTC &= ~(_PORTC_RC6_MASK | _PORTC_RC7_MASK);
@@ -324,8 +324,8 @@ void stairs_init(void) {
     
     stairs.night_light.brightness = 0x3F; 
     stairs.night_light.color = RED;
-    stairs.night_light.sensitivity1 = 0x3F;
-    stairs.night_light.sensitivity2 = 0x3F;
+    stairs.night_light.sensitivity1 = 0x0;//0x3F;
+    stairs.night_light.sensitivity2 = 0x0;//0x3F;
     stairs.night_light.adc_time = 5; //1 second
     stairs.night_light.nl_status1 = NL_OFF;
     stairs.night_light.nl_status2 = NL_OFF;
