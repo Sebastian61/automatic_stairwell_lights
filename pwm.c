@@ -7,8 +7,8 @@ void pwm_init(void) {
     CCP1CONbits.CCP1M = 0b1111; //all outputs active low
     PSTRCONbits.STRSYNC = 1;    //enables output steering on next PWM period: enables fuller PWM waveform
     //P1A as I/O; P1<B:D> as port pins
-    PSTRCONbits.STRA = 0;   //will only be needed when nightlight is on
-    PSTRCONbits.STRB = 0;
+    PSTRCONbits.STRA = 1;   //will only be needed when nightlight is on
+    PSTRCONbits.STRB = 1;
     PSTRCONbits.STRC = 0;
     PSTRCONbits.STRD = 0;
     CCPR1L = 0x3F; //setting 8 (in the middle) CCP1CONbits.DC1B unused
@@ -24,16 +24,16 @@ void pwm_set_duty(uint8_t duty) {
 //turns PWM on on pin RC5/P1A or P1B
 void pwm_on(uint8_t no) {
     if(no == 1)
-        PSTRCONbits.STRA = 1;
+        TRISC &= ~_PORTC_RC5_MASK;
     else
-        PSTRCONbits.STRB = 1;
+        TRISC &= ~_PORTC_RC4_MASK;
     return;
 }
 
 void pwm_off(uint8_t no) {
     if(no == 1)
-        PSTRCONbits.STRA = 0;
+        TRISC |= _PORTC_RC5_MASK;
     else
-        PSTRCONbits.STRB = 0;
+        TRISC |= _PORTC_RC4_MASK;
     return;
 }
