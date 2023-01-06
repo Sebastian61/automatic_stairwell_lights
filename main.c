@@ -171,7 +171,7 @@ void main(void) {
     enable_global_interrupt(1);
     timer1_on_off(1);
     lcd_clear();
-    lcd_handler(&stairs.enc_action, &stairs);
+    lcd_handler(&stairs.enc_action, &stairs);  //TODO change logic to just pass the staris structure to the function
             
     while(1) {
         //check if LCD needs updating
