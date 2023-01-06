@@ -328,9 +328,7 @@ void lcd_handler(encoder_action *action, stairwell *stairs){
             lcd_send_string((uint8_t *)"    ", 5);
             break;
         case MENU_SETTINGS_NL_SENSITIVITY:
-            //turns the night light on
-            stairs->night_light.sensitivity1 = 0;
-            stairs->night_light.sensitivity2 = 0;
+            //no need to turn nightlight on to alter sensitivity
             if(!menu.current_screen)
                 lcd_send_string((uint8_t *)menu.menu_string_values[menu.cursor_index], menu.menu_string_len[menu.cursor_index]);
             

@@ -170,8 +170,6 @@ void main(void) {
     enable_peripheral_interrupt(1);
     enable_global_interrupt(1);
     timer1_on_off(1);
-    lcd_send_string((uint8_t *)"DONE!", 6);
-    __delay_ms(1000);
     lcd_clear();
     lcd_handler(&stairs.enc_action, &stairs);
             
