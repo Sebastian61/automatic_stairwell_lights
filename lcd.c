@@ -161,7 +161,7 @@ void lcd_handler(encoder_action *action, stairwell *stairs){
                 case MENU_SETTINGS_NL_BRIGHTNESS:
                     if(menu.menu_values.menu_nl_brightness != 1) {
                        --menu.menu_values.menu_nl_brightness;
-                       stairs->night_light.brightness = (menu.menu_values.menu_nl_brightness * menu.menu_values.menu_nl_brightness) - 1;
+                       stairs->night_light.brightness = ((menu.menu_values.menu_nl_brightness * menu.menu_values.menu_nl_brightness) - 1);
                     }
                     break;
                 case MENU_SETTINGS_NL_COLOR:

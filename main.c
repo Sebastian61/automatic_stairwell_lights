@@ -40,6 +40,7 @@ void set_nlight_color(nl_color color);
 void stairs_init(void);
 inline void get_ml_action(uint8_t *action);
 void update_stairs(uint32_t light_state);
+void system_test(void);
 
 stairwell stairs;
 
@@ -60,37 +61,48 @@ void __interrupt() myisr(void) {
             if(--stairs.stairs_timer == 0) {
                 stairs.stairs_timer = stairs.main_light.duration;
                 stairs.main_light.ml_status = ML_TURNING_OFF;
-                stairs.main_light.target_state = 0;
-                if(stairs.main_light.ml_action & ML_INIT_TRIG)
+                stairs.main_light.target_state = 0x0;
+                stairs.main_light.ml_action &= ML_INIT_TRIG;
+                if(stairs.main_light.ml_action & ML_INIT_TRIG) {
                     stairs.main_light.ml_action |= ML_BOTTOM_UP_MASK;
-                else
+                    stairs.main_light.state &= (stairs.main_light.state << 1);
+                }
+                else {
                     stairs.main_light.ml_action |= ML_TOP_DOWN_MASK;
+                    stairs.main_light.state &= (stairs.main_light.state >> 1);
+                }
+                
+                stairs.main_light.ml_action |= ML_UPDATE_MASK;
             }
+        }
+        
+        else if(stairs.main_light.state == stairs.main_light.target_state) {       //TODO could only be the pre-lighting
+            stairs.main_light.ml_action &= ~(ML_BOTTOM_UP_MASK | ML_TOP_DOWN_MASK);    //clear action queue
+            if(stairs.main_light.target_state == 0xFFFFFFFF)
+                stairs.main_light.ml_status = ML_ALL_ON;
+            else
+                stairs.main_light.ml_status = ML_OFF;
         }
         
 //        else if(stairs.main_light.ml_status == ML_OFF) {
 //            //no nothing
 //        }
         
-        else if(stairs.main_light.target_state == stairs.main_light.state) {
-            //do nothing
-        }
-        
         //handle light up interval
-        else if(--stairs.light_interval_timer == 0) {
+        else if((--stairs.light_interval_timer == 0) & (stairs.main_light.ml_status != ML_OFF)) {
             stairs.light_interval_timer = stairs.main_light.on_speed;
-            if((stairs.main_light.ml_action & ML_BOTTOM_UP_MASK) & (stairs.main_light.ml_status == ML_TURNING_ON)) {
-                stairs.main_light.state |= (stairs.main_light.state << 1);
-            } 
-            else {
-                stairs.main_light.state &= (stairs.main_light.state << 1);
+            if(stairs.main_light.ml_action & ML_BOTTOM_UP_MASK) {
+                if(stairs.main_light.ml_status == ML_TURNING_ON)
+                    stairs.main_light.state |= (stairs.main_light.state << 1);
+                else
+                    stairs.main_light.state &= (stairs.main_light.state << 1);
             }
             
-            if((stairs.main_light.ml_action & ML_TOP_DOWN_MASK) & (stairs.main_light.ml_status == ML_TURNING_ON)) {
-                stairs.main_light.state |= (stairs.main_light.state >> 1);
-            }
-            else {
-                stairs.main_light.state &= (stairs.main_light.state >> 1);
+            if(stairs.main_light.ml_action & ML_TOP_DOWN_MASK) {
+                if(stairs.main_light.ml_status == ML_TURNING_ON)
+                    stairs.main_light.state |= (stairs.main_light.state >> 1);
+                else
+                    stairs.main_light.state &= (stairs.main_light.state >> 1);
             }
             
             stairs.main_light.ml_action |= ML_UPDATE_MASK;
@@ -106,33 +118,33 @@ void __interrupt() myisr(void) {
     }
     
     //IO interrupt
-    if(INTCONbits.RABIF) {
+    if(INTCONbits.RABIF && INTCONbits.RABIE) {
         INTCONbits.RABIF = 0;
         //handle encoder
         stairs.enc_action = encoder_interrupt();
         if(stairs.enc_action != ENC_IDLE)
             INTCONbits.RABIE = 0;   //disable interrupts for IO interrupts
         
-        //handle stair sensors outer level
-        if((stairs.main_light.pre_lighting == 1) && (stairs.main_light.ml_status == ML_OFF)) {
-            if(STAIR_UP1 == 1) {
-                stairs.main_light.target_state |= ((1ul << STEP_NUMBER) | 
-                                                    (1ul << (STEP_NUMBER - 1))); //turns on top three lights
-            }
-            else {
-                stairs.main_light.target_state &= ~((1ul << STEP_NUMBER) | 
-                                                    (1ul << (STEP_NUMBER - 1))); 
-            }
-            
-            if(STAIR_DOWN1 == 1) {
-                stairs.main_light.target_state |= 0b11; //turns on bottom three lights
-            }else {
-                stairs.main_light.target_state &= ~(0b11ul);
-            }
-            
-            stairs.main_light.state = stairs.main_light.target_state;
-            stairs.main_light.ml_status |= ML_UPDATE_MASK;
-        }
+//        //handle stair sensors outer level
+//        if((stairs.main_light.pre_lighting == 1) && (stairs.main_light.ml_status == ML_OFF)) {
+//            if(STAIR_UP1 == 1) {
+//                stairs.main_light.target_state |= ((1ul << STEP_NUMBER) | 
+//                                                    (1ul << (STEP_NUMBER - 1))); //turns on top three lights
+//            }
+//            else {
+//                stairs.main_light.target_state &= ~((1ul << STEP_NUMBER) | 
+//                                                    (1ul << (STEP_NUMBER - 1))); 
+//            }
+//            
+//            if(STAIR_DOWN1 == 1) {
+//                stairs.main_light.target_state |= 0b11; //turns on bottom three lights
+//            }else {
+//                stairs.main_light.target_state &= ~(0b11ul);
+//            }
+//            
+//            stairs.main_light.state = stairs.main_light.target_state;
+//            stairs.main_light.ml_status |= ML_UPDATE_MASK;
+//        }
         
         //handle stair sensors inner level
         if(stairs.main_light.ml_status != ML_ALL_ON) {
@@ -166,10 +178,11 @@ void main(void) {
     stairs_init();
     menu_init();
     //delay so the user can actually see the text on the lcd screen
-    __delay_ms(1000);
+    __delay_ms(100);
     enable_peripheral_interrupt(1);
     enable_global_interrupt(1);
     timer1_on_off(1);
+    system_test();  //tests main light on and off
     lcd_clear();
     lcd_handler(&stairs.enc_action, &stairs);  //TODO change logic to just pass the staris structure to the function
             
@@ -307,14 +320,14 @@ void set_nlight_color(nl_color color) {
 }
 
 void stairs_init(void) {
-    stairs.light_sensor_timer = 5; //1 second
-    stairs.stairs_timer = 600;  //2 minutes
-    stairs.light_interval_timer = 1; //0.2 seconds
+    stairs.light_sensor_timer = 5u; //1 second
+    stairs.stairs_timer = 10u;   //3 seconds for init 600;  //2 minutes
+    stairs.light_interval_timer = 2u; //0.4 seconds
     stairs.enc_action = ENC_IDLE;
     stairs.sys_status = SYS_NORMAL;
     
-    stairs.main_light.duration = 600; //2 minutes
-    stairs.main_light.on_speed = 1; //0.2 seconds
+    stairs.main_light.duration = 600u; //2 minutes
+    stairs.main_light.on_speed = 3; //0.6 seconds
     stairs.main_light.pre_lighting = 1; //enable pre lighting
     stairs.main_light.ml_action = 0;
     stairs.main_light.state = 0;
@@ -322,8 +335,8 @@ void stairs_init(void) {
     
     stairs.night_light.brightness = 0x3F; 
     stairs.night_light.color = RED;
-    stairs.night_light.sensitivity1 = 0x0;//0x3F;
-    stairs.night_light.sensitivity2 = 0x0;//0x3F;
+    stairs.night_light.sensitivity1 = 0x3F;
+    stairs.night_light.sensitivity2 = 0x3F;
     stairs.night_light.adc_time = 5; //1 second
     stairs.night_light.nl_status1 = NL_OFF;
     stairs.night_light.nl_status2 = NL_OFF;
@@ -343,5 +356,21 @@ void update_stairs(uint32_t stair_state) {
         stair_state >>= 1;
     }
     push_to_led(temp);
+    return;
+}
+
+void system_test(void) {
+    INTCONbits.RABIE = 0; //pin change interrupts
+    stairs.main_light.target_state = 0xFFFFFFFF;
+    stairs.main_light.ml_action |= (ML_BOTTOM_UP_MASK | ML_INIT_TRIG);
+    stairs.main_light.state |= 0x01;
+    stairs.main_light.ml_status = ML_TURNING_ON;
+    while(stairs.main_light.ml_status != ML_OFF) {
+        if(stairs.main_light.ml_action & ML_UPDATE_MASK) {
+            stairs.main_light.ml_action &= ~ML_UPDATE_MASK;
+            update_stairs(stairs.main_light.state);
+        }
+    }
+    INTCONbits.RABIE = 1; //pin change interrupts
     return;
 }

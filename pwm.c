@@ -18,7 +18,7 @@ void pwm_init(void) {
 }
 
 void pwm_set_duty(uint8_t duty) {
-    CCPR1L = duty;
+    CCPR1L = ~duty;
 }
 
 //turns PWM on on pin RC5/P1A or P1B

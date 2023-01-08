@@ -14,6 +14,7 @@ static void push_to_serial(uint8_t *output, uint8_t len) {
             SRCLK = 1;
             SRCLK = 0;
         }
+        output++;
     }
 }
 
