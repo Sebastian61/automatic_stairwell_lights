@@ -170,6 +170,8 @@ void lcd_handler(encoder_action *action, stairwell *stairs){
                         --stairs->night_light.color;
                     else
                         stairs->night_light.color = PURPLE;
+                    
+                    stairs->night_light.color_changed = 1;
                     break;
                 case MENU_SETTINGS_NL_SENSITIVITY:
                     if(menu.menu_values.menu_nl_sensitivity != 1) {
@@ -219,6 +221,8 @@ void lcd_handler(encoder_action *action, stairwell *stairs){
                         ++stairs->night_light.color;
                     else
                         stairs->night_light.color = NONE;
+                    
+                    stairs->night_light.color_changed = 1;
                     break;
                 case MENU_SETTINGS_NL_SENSITIVITY:
                     if(menu.menu_values.menu_nl_sensitivity != 16) {

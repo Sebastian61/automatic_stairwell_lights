@@ -235,7 +235,10 @@ void main(void) {
             }
         }
         
-        set_nlight_color(stairs.night_light.color);
+        if(stairs.night_light.color_changed) {
+            stairs.night_light.color_changed = 0;
+            set_nlight_color(stairs.night_light.color);
+        }
     }
     return;
 }
@@ -335,6 +338,7 @@ void stairs_init(void) {
     
     stairs.night_light.brightness = 0x3F; 
     stairs.night_light.color = RED;
+    stairs.night_light.color_changed = 1;
     stairs.night_light.sensitivity1 = 0x3F;
     stairs.night_light.sensitivity2 = 0x3F;
     stairs.night_light.adc_time = 5; //1 second

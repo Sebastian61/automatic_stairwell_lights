@@ -105,6 +105,7 @@ typedef struct {
         nl_status nl_status2;
         uint8_t brightness;
         nl_color color;
+        uint8_t color_changed;
         uint8_t sensitivity1;
         uint8_t sensitivity2;
         uint8_t adc_time;
