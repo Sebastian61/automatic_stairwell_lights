@@ -281,7 +281,7 @@ void osc_init(void) {
     return;
 }
 
-void set_nlight_color(nl_color color) {
+void set_nlight_color(nl_color color) { //TODO only change the colors when strictly necessary
     NL_BLUE = 0;
     NL_GREEN = 0;
     NL_RED = 0;
@@ -366,6 +366,7 @@ void system_test(void) {
     stairs.main_light.state |= 0x01;
     stairs.main_light.ml_status = ML_TURNING_ON;
     while(stairs.main_light.ml_status != ML_OFF) {
+//        update_stairs(0xffffffff);
         if(stairs.main_light.ml_action & ML_UPDATE_MASK) {
             stairs.main_light.ml_action &= ~ML_UPDATE_MASK;
             update_stairs(stairs.main_light.state);
