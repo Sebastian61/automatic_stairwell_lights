@@ -103,7 +103,7 @@ void lcd_convert_duration(uint16_t duration) {
 //    return;
 //}
 
-void lcd_handler(encoder_action *action, stairwell *stairs){
+void lcd_handler(encoder_action *action, stairwell *stairs){//TODO add a setting to configure whether or not stairs light will function all the time, based on top floor or bottom floor sensor, or both.
 //    //testing function
 //    static uint8_t test;
 //    static encoder_action last_action;
@@ -319,6 +319,8 @@ void lcd_handler(encoder_action *action, stairwell *stairs){
                 else
                     lcd_send_string(&empty_char, 2);
             }
+            if(menu.menu_values.menu_nl_brightness == 16)   //will only show up on 2x20 screens
+                lcd_send_string((uint8_t *)"MAX", 4);
             break;
         case MENU_SETTINGS_NL_COLOR:
             //turns the night light on
@@ -343,13 +345,15 @@ void lcd_handler(encoder_action *action, stairwell *stairs){
                 else
                     lcd_send_string(&empty_char, 2);
             }
+            if(menu.menu_values.menu_nl_sensitivity == 16)
+                lcd_send_string((uint8_t *)"MAX", 4);
             break;
         case MENU_SETTINGS_ML_ONSPEED:
             if(!menu.current_screen)
                 lcd_send_string((uint8_t *)menu.menu_string_values[menu.cursor_index], menu.menu_string_len[menu.cursor_index]);
             
             lcd_move_cursor(2, 0);
-            for(i = 0; i < menu.menu_values.menu_ml_on_speed; ++i) {
+            for(i = 0; i < menu.menu_values.menu_ml_on_speed; ++i) {//TODO change if gonna use onspeed
                 lcd_send_string(&temp_char, 2);
             }
             break;
