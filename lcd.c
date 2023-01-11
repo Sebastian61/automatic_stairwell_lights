@@ -282,14 +282,14 @@ void lcd_handler(encoder_action *action, stairwell *stairs){
         case MENU_MAIN:
             if(menu.current_screen)
                 break;
-            lcd_send_string((uint8_t *)"STATUS: ", 8);
+            lcd_send_string((uint8_t *)"STATUS: ", 9);
             if(stairs->sys_status == SYS_NORMAL)
                 lcd_send_string((uint8_t *)MENU_SYS_NORMAL_STR, sizeof(MENU_SYS_NORMAL_STR));
             else
                 lcd_send_string((uint8_t *)MENU_SYS_ERROR_STR, sizeof(MENU_SYS_ERROR_STR));
             
             lcd_move_cursor(2, 0);
-            lcd_send_string((uint8_t *)"PUSH for SETTING", 16);
+            lcd_send_string((uint8_t *)"PUSH for SETTING", 17);
             break;
         case MENU_SETTINGS:
             lcd_send_string((uint8_t *)menu.menu_string_values[menu.setting_index], menu.menu_string_len[menu.setting_index]);
