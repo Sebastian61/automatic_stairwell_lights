@@ -44,9 +44,17 @@ void adc_interrupt(void) {
         adc_start_it(ADC_NO2);
     }
     else if(adc.status == ADC_CONVERTING_NO2) {
-        ADCON0bits.ADON = 0;  //turns off ADC module
         adc.value2 = ADRESH;
+        adc.value2 = ADRESH;
+//        ADCON0bits.ADON = 0;  //turns off ADC module
         adc.status = ADC_IDLE;
     }
     return;
+}
+
+uint8_t adc_is_converting(void) {
+    if (adc.status == ADC_IDLE)
+        return 0;
+    else 
+        return 1;
 }

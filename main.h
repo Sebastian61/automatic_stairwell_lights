@@ -42,6 +42,8 @@
 #define _XTAL_FREQ  8000000
 #define DATALEN     DATA_LENGTH_FOUR_BITS
 #define STEP_NUMBER (20 - 1)
+#define calc_var(N) ((1ul << (N + 1)) - 1)
+#define TARGET_VALUE calc_var(STEP_NUMBER)
 #define USING_2X20_LCD
 
 //serial data ports
@@ -98,6 +100,8 @@ typedef struct {
     uint16_t light_sensor_timer;
     uint16_t stairs_timer;
     uint8_t light_interval_timer;
+    uint8_t str_up_prev;
+    uint8_t str_down_prev;
     encoder_action enc_action;
     sys_status sys_status;
     struct {

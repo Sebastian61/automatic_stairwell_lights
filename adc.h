@@ -28,6 +28,7 @@ void adc_init(void);
 void adc_start(void);
 uint8_t adc_get_value(uint8_t no);
 void adc_interrupt(void);
+uint8_t adc_is_converting(void);
 
 #endif	/* ADC_H */
 
