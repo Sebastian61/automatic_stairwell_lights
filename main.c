@@ -106,7 +106,7 @@ void __interrupt() myisr(void) {
                 else
                     stairs.main_light.state &= (stairs.main_light.state >> 1);
             }
-            
+            stairs.main_light.state &= STAIRS_MASK;
             stairs.main_light.ml_action |= ML_UPDATE_MASK;
         }
     }
@@ -128,21 +128,17 @@ void __interrupt() myisr(void) {
             INTCONbits.RABIE = 0;   //disable interrupts for IO interrupts
         
         //handle stair sensors outer level
-        if((stairs.main_light.pre_lighting == 1) && (stairs.main_light.ml_status != ML_ALL_ON)
-                /*&& !((STAIR_UP1 == stairs.str_up_prev) && (STAIR_DOWN1 == stairs.str_down_prev))*/) {
+        if((stairs.main_light.pre_lighting == 1) && (stairs.main_light.ml_status == ML_OFF)
+                && !((STAIR_UP1 == stairs.str_up_prev) && (STAIR_DOWN1 == stairs.str_down_prev))) {
             stairs.str_up_prev = STAIR_UP1;
             stairs.str_down_prev = STAIR_DOWN1;
             if(STAIR_UP1 == 1) {
-//                stairs.main_light.target_state |= ((1ul << STEP_NUMBER) | 
-//                                                    (1ul << (STEP_NUMBER - 1))); //turns on top three lights
-//                stairs.main_light.state |= ((1ul << STEP_NUMBER) | 
-//                                                    (1ul << (STEP_NUMBER - 1))); //turns on top three lights
+                stairs.main_light.target_state |= ((1ul << STEP_NUMBER) | 
+                                                    (1ul << (STEP_NUMBER - 1))); //turns on top three lights
             }
             else {
-//                stairs.main_light.target_state &= ~((1ul << STEP_NUMBER) | 
-//                                                    (1ul << (STEP_NUMBER - 1))); 
-//                stairs.main_light.state &= ~((1ul << STEP_NUMBER) | 
-//                                                    (1ul << (STEP_NUMBER - 1))); 
+                stairs.main_light.target_state &= ~((1ul << STEP_NUMBER) | 
+                                                    (1ul << (STEP_NUMBER - 1)));
             }
             
             if(STAIR_DOWN1 == 1) {
@@ -156,20 +152,21 @@ void __interrupt() myisr(void) {
         }
         
           //handle stair sensors inner level
-//        if(stairs.main_light.ml_status != ML_ALL_ON) {
-//            if(STAIR_DOWN2 == 1) {
-//                stairs.main_light.target_state = TARGET_VALUE;
-//                stairs.main_light.ml_action |= (ML_BOTTOM_UP_MASK | ML_INIT_TRIG);
-//                stairs.main_light.state |= 0x01;
-//                stairs.main_light.ml_status = ML_TURNING_ON;
-//            }
-//            if(STAIR_UP2 == 1) {
-//                stairs.main_light.target_state = TARGET_VALUE;
-//                stairs.main_light.ml_action |= ML_TOP_DOWN_MASK;
-//                stairs.main_light.state |= (1ul << STEP_NUMBER);
-//                stairs.main_light.ml_status = ML_TURNING_ON;
-//            }
-//        }
+        if(stairs.main_light.ml_status != ML_ALL_ON) {
+            if(STAIR_DOWN2 == 1) {
+                stairs.main_light.target_state = TARGET_VALUE;
+                stairs.main_light.ml_action |= (ML_BOTTOM_UP_MASK | ML_INIT_TRIG);
+                stairs.main_light.state |= 0x01;
+                stairs.main_light.ml_status = ML_TURNING_ON;
+            }
+            if(STAIR_UP2 == 1) {
+                stairs.main_light.target_state = TARGET_VALUE;
+                stairs.main_light.ml_action |= ML_TOP_DOWN_MASK;
+                stairs.main_light.ml_action &= ~ML_INIT_TRIG;
+                stairs.main_light.state |= (1ul << STEP_NUMBER);
+                stairs.main_light.ml_status = ML_TURNING_ON;
+            }
+        }
     }
     return;
 }
@@ -340,7 +337,7 @@ void stairs_init(void) {
     stairs.enc_action = ENC_IDLE;
     stairs.sys_status = SYS_NORMAL;
     
-    stairs.main_light.duration = 600u; //2 minutes
+    stairs.main_light.duration = 5u; //testin 600u; //2 minutes
     stairs.main_light.on_speed = 3; //0.6 seconds
     stairs.main_light.pre_lighting = 1; //enable pre lighting
     stairs.main_light.ml_action = 0;

@@ -44,6 +44,7 @@
 #define STEP_NUMBER (20 - 1)
 #define calc_var(N) ((1ul << (N + 1)) - 1)
 #define TARGET_VALUE calc_var(STEP_NUMBER)
+#define STAIRS_MASK TARGET_VALUE
 #define USING_2X20_LCD
 
 //serial data ports

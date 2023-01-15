@@ -188,8 +188,14 @@ void lcd_handler(encoder_action *action, stairwell *stairs){//TODO add a setting
                     }
                     break;
                 case MENU_SETTINGS_ML_PRELIGHTING:
-                    if(stairs->main_light.pre_lighting)
+                    if(stairs->main_light.pre_lighting) {
                         stairs->main_light.pre_lighting = 0;
+                        if(stairs->main_light.ml_status == ML_OFF) {
+                            stairs->main_light.state = 0;
+                            stairs->main_light.target_state = 0;
+                            stairs->main_light.ml_action |= ML_UPDATE_MASK;
+                        }
+                    }
                     else
                         stairs->main_light.pre_lighting = 1;
                     break;
@@ -239,8 +245,14 @@ void lcd_handler(encoder_action *action, stairwell *stairs){//TODO add a setting
                     }
                     break;
                 case MENU_SETTINGS_ML_PRELIGHTING:
-                    if(stairs->main_light.pre_lighting)
+                    if(stairs->main_light.pre_lighting) {
                         stairs->main_light.pre_lighting = 0;
+                        if(stairs->main_light.ml_status == ML_OFF) {
+                            stairs->main_light.state = 0;
+                            stairs->main_light.target_state = 0;
+                            stairs->main_light.ml_action |= ML_UPDATE_MASK;
+                        }
+                    }
                     else
                         stairs->main_light.pre_lighting = 1;
                     break;
